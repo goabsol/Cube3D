@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 11:41:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/01/18 00:32:32 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/04 12:39:07 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,18 @@ typedef struct	s_player
 	double		t[4];
 	int			w[4];
 	int			spaaaaaace;
+	int			lu;
+	int			ld;
+	int			lr;
+	int			ll;
+	
 }				t_pl;
+
+typedef struct	s_sprite
+{
+	int			p[2];
+	double		dst;
+}				t_s;
 
 typedef struct	s_game
 {
@@ -78,9 +89,11 @@ typedef struct	s_game
 	t_tb		tb;
 	t_pl		pl;
 	int			pe;
+	int			n_sp;
 	t_m			m;
 	int			yuzless;
 	double		tmp[4];
+	t_s			*sd;
 	int			a;
 	double 		dpp;
 	double		sfr;
@@ -90,11 +103,5 @@ typedef struct	s_game
 
 #endif
 
-// while (++i < 250)
-// 		{
-// 			g.tmp[0] = (p.p[0] - a * i + p.s / 2) / g.m.tw;
-// 			g.tmp[1] = (p.p[1] - b * i + p.s / 2) / g.m.th;
-// 			printf("heeeeeeere %d %d\n", g.tmp[0], g.tmp[1]);
-// 			if (g.tmp[0] >= 0 && g.tmp[1] >= 0 && g.tmp[0] < g.m.col && g.tmp[1] < g.m.row/* && g.m.a[g.tmp[0]][g.tmp[1]] == '0'*/)
-// 				ppii(&g, g.tmp[0] * g.m.tw, g.tmp[1] * g.m.th, 0xFF0000);
-// 		}
+			
+

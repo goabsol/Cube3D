@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 20:50:34 by arhallab          #+#    #+#             */
-/*   Updated: 2020/01/19 02:35:17 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/04 18:39:08 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int		drawtile(t_g *g, int *o, int w, int h)
 	return (1);
 }
 
-t_m		new_m()
+t_m		new_m(void)
 {
 	t_m		m;
 
@@ -59,7 +59,7 @@ t_m		new_m()
 	*m.a = 0;
 	m.offset[0] = 0;
 	m.offset[1] = 0;
-	m.ts = 16;
+	m.ts = 64;
 	m.row = 0;
 	m.col = 0;
 	return (m);
@@ -70,8 +70,8 @@ t_pl	new_plr(size_t x, t_m m, int a)
 	t_pl	plr;
 
 	plr.s = m.ts / 2;
-	plr.p[0] = x * m.ts + m.ts / 2 - plr.s / 2;
-	plr.p[1] = m.row * m.ts + m.ts / 2 - plr.s / 2;
+	plr.p[0] = x * m.ts + m.ts / 2;
+	plr.p[1] = m.row * m.ts + m.ts / 2;
 	plr.ms = m.ts / 8;
 	plr.rs = 2;
 	plr.w[0] = 0;
@@ -83,7 +83,10 @@ t_pl	new_plr(size_t x, t_m m, int a)
 	plr.t[2] = 0;
 	plr.t[3] = 0;
 	plr.o = a * M_PI_2;
-
+	plr.ll = 0;
+	plr.lu = 0;
+	plr.lr = 0;
+	plr.ld = 0;
 	return (plr);
 }
 
@@ -110,6 +113,50 @@ int		ft_array_realloc(char ***p, size_t size)
 	return (1);
 }
 
+int		t_s_array_realloc(t_s **p, size_t size)
+{
+	t_s					*ptr;
+	unsigned long long	i;
+
+	i = 0;
+	if (!(ptr = malloc(sizeof(t_s) * size)))
+		return (0);
+	if (!(*p))
+	{
+		*p = ptr;
+		return (1);
+	}
+	while (i < size - 1)
+	{
+		ptr[i] = (*p)[i];
+		i++;
+	}
+	free(*p);
+	*p = ptr;
+	return (1);
+}
+
+void	sprite_rsort(t_s **a, int s)
+{
+	int		i;
+	int		j;
+	t_s		tmp;
+	i = -1;
+	while (++i < s)
+	{
+		j = i;
+		while (++j < s)
+		{
+			if ((*a)[i].dst < (*a)[j].dst)
+			{
+				tmp = (*a)[i];
+				(*a)[i] = (*a)[j];
+				(*a)[j] = tmp;
+			}
+		}
+	}
+}
+
 void	drawplayer(t_pl p, t_g g)
 {
 	int		i;
@@ -126,101 +173,101 @@ void	drawplayer(t_pl p, t_g g)
 	// 	}
 	ray = g.pl.o + g.pi_6;
 	j = -1;
-	while (++j < g.res[0])
+	while (++j < g.res[0] && ((g.n_sp = 0) || 1))
 	{
 		g.sct[0] = sin(ray);
 		g.sct[1] = cos(ray);
 		// ray -= ((ray - M_PI_2 < 0.0000001 && ray - M_PI_2 > -0.0000001)
 		// || (ray + M_PI_2 < 0.0000001 && ray + M_PI_2 > -0.0000001) ? 0.0000001 : 0);
 		g.sct[2] = tan(ray);
+		p.ll = !!(g.sct[0] >= 0);
+		p.lr = !p.ll;
+		p.lu = !!(g.sct[1] >= 0);
+		p.ld = !p.lu;
 		// while (++i < 250)
 		// 	ppii(&g, (int)(p.p[0] - sct[0] * i + p.s / 2),
 		// 	(int)(p.p[1] - g.sct[1] * i + p.s / 2), 0xFF0000);
 		g.tmp[0] = p.p[0] + p.s / 2;
 		g.tmp[1] = p.p[1] + p.s / 2;
-		g.tmp[2] = g.tmp[0];
-		g.tmp[3] = g.tmp[1];
-		i = 0;
-		while ((int)(g.tmp[1] - g.sct[1]) % g.m.ts && (g.tmp[0] - g.sct[0]) < w 
-		&& (g.tmp[1] - g.sct[1]) < h && (g.tmp[0] - g.sct[0]) > -1 && (g.tmp[1] - g.sct[1]) > -1)
-		{
-			g.tmp[0] = p.p[0] + p.s / 2 - g.sct[0] * i;
-			g.tmp[1] = p.p[1] + p.s / 2 - g.sct[1] * i++;
-		}
-		g.tmp[0] -= g.sct[0];
-		g.tmp[1] -= g.sct[1];
-		i = 0;
-		while ((int)(g.tmp[2] - g.sct[0]) % g.m.ts && (g.tmp[2] - g.sct[0]) < w 
-		&& (g.tmp[3] - g.sct[1]) < h && (g.tmp[2] - g.sct[0]) > -1 && (g.tmp[3] - g.sct[1]) > -1)
-		{
-			g.tmp[2] = p.p[0] + p.s / 2 - g.sct[0] * i;
-			g.tmp[3] = p.p[1] + p.s / 2 - g.sct[1] * i++;
-		}
-		g.tmp[2] -= g.sct[0];
-		g.tmp[3] -= g.sct[1];
-		double xh = 0, yh = 0, xv = 0, yv = 0;
+		g.tmp[2] = p.p[0] + p.s / 2;
+		g.tmp[3] = p.p[1] + p.s / 2;
 
+		g.tmp[1] = floor(g.tmp[1] / g.m.ts) * g.m.ts + p.ld * g.m.ts;
+		g.tmp[0] = g.tmp[0] + (g.tmp[1] - (p.p[1] + p.s / 2)) * g.sct[2];
+		g.tmp[2] = floor(g.tmp[2] / g.m.ts) * g.m.ts + p.lr * g.m.ts;
+		g.tmp[3] = g.tmp[3] + (g.tmp[2] - (p.p[0] + p.s / 2)) / g.sct[2];
+
+		double xh =  0, yh = -p.lu, xv = -p.ll, yv = 0;
 		while ((g.tmp[2] + xv) < w && (g.tmp[3] + yv) < h
 		&& (g.tmp[2] + xv) > -1 && (g.tmp[3] + yv) > -1
-		&& g.m.a[(int)(g.tmp[3] + yv) / g.m.ts][(int)(g.tmp[2] + xv) / g.m.ts] == '0'
-		&& g.m.a[(int)(g.tmp[3] + yv) / g.m.ts][(int)(g.tmp[2] + xv - 1) / g.m.ts] == '0'
-		&& g.m.a[(int)(g.tmp[3] + yv - 1) / g.m.ts][(int)(g.tmp[2] + xv) / g.m.ts] == '0'
-		&& g.m.a[(int)(g.tmp[3] + yv - 1) / g.m.ts][(int)(g.tmp[2] + xv - 1) / g.m.ts] == '0')
+		&& !(g.m.a[(int)(g.tmp[3] + yv) / g.m.ts][(int)(g.tmp[2] + xv) / g.m.ts] == '1'))
 		{
+			if (g.m.a[(int)((g.tmp[3] + yv) / g.m.ts)][(int)((g.tmp[2] + xv) / g.m.ts)] == '2')
+			{
+				int b = -1;
+				while(++b < g.n_sp)
+					if (g.sd[b].p[0] == (int)((g.tmp[3] + yv) / g.m.ts) && g.sd[b].p[1] == (int)((g.tmp[2] + xv) / g.m.ts))
+					{
+						if (g.sd[b].dst > sqrt(pow(g.tmp[2] - g.pl.p[0], 2) + pow(g.tmp[3] - g.pl.p[1], 2)))
+							g.sd[b].dst = sqrt(pow(g.tmp[2] - g.pl.p[0], 2) + pow(g.tmp[3] - g.pl.p[1], 2));
+						break;
+					}
+				if (b == g.n_sp)
+				{
+					g.n_sp++;
+					t_s_array_realloc(&(g.sd), g.n_sp);
+					g.sd[g.n_sp - 1].p[0] = (int)((g.tmp[2] + xv) / g.m.ts);
+					g.sd[g.n_sp - 1].p[1] = (int)((g.tmp[3] + yv) / g.m.ts);
+					g.sd[g.n_sp - 1].dst = sqrt(pow(g.tmp[2] - g.pl.p[0], 2) + pow(g.tmp[3] - g.pl.p[1], 2));
+				}
+			}
 			yv += (g.m.ts / g.sct[2]) * (g.sct[0] < 0 ? 1 : -1);
 			xv += g.m.ts * (g.sct[0] < 0 ? 1 : -1);
 		}
 		while ((g.tmp[0] + xh) < w && (g.tmp[1] + yh) < h
 		&& (g.tmp[0] + xh) > -1 && (g.tmp[1] + yh) > -1
-		&& g.m.a[(int)((g.tmp[1] + yh) / g.m.ts)][(int)((g.tmp[0] + xh) / g.m.ts)] == '0'
-		&& g.m.a[(int)((g.tmp[1] + yh - 1) / g.m.ts)][(int)((g.tmp[0] + xh) / g.m.ts)] == '0'
-		&& g.m.a[(int)((g.tmp[1] + yh) / g.m.ts)][(int)((g.tmp[0] + xh - 1) / g.m.ts)] == '0'
-		&& g.m.a[(int)((g.tmp[1] + yh - 1) / g.m.ts)][(int)((g.tmp[0] + xh - 1) / g.m.ts)] == '0')
+		&& !(g.m.a[(int)((g.tmp[1] + yh) / g.m.ts)][(int)((g.tmp[0] + xh) / g.m.ts)] == '1'))
 		{
+			if (g.m.a[(int)((g.tmp[1] + yh) / g.m.ts)][(int)((g.tmp[0] + xh) / g.m.ts)] == '2')
+			{
+				int b = -1;
+				while(++b < g.n_sp)
+					if (g.sd[b].p[0] == (int)((g.tmp[0] + yh) / g.m.ts) && g.sd[b].p[1] == (int)((g.tmp[1] + xh) / g.m.ts))
+					{
+						if (g.sd[b].dst > sqrt(pow(g.tmp[0] - g.pl.p[0], 2) + pow(g.tmp[1] - g.pl.p[1], 2)))
+							g.sd[b].dst = sqrt(pow(g.tmp[0] - g.pl.p[0], 2) + pow(g.tmp[1] - g.pl.p[1], 2));
+						break;
+					}
+				if (b == g.n_sp)
+				{
+					g.n_sp++;
+					t_s_array_realloc(&(g.sd), g.n_sp);
+					g.sd[g.n_sp - 1].p[0] = (int)((g.tmp[0] + yh) / g.m.ts);
+					g.sd[g.n_sp - 1].p[1] = (int)((g.tmp[1] + xh) / g.m.ts);
+					g.sd[g.n_sp - 1].dst = sqrt(pow(g.tmp[0] - g.pl.p[0], 2) + pow(g.tmp[1] - g.pl.p[1], 2));
+				}
+			}
 			xh += g.m.ts * g.sct[2] * (g.sct[1] < 0 ? 1 : -1);
 			yh += g.m.ts * (g.sct[1] < 0 ? 1 : -1);
 		}
-		g.tmp[0] += xh;
-		g.tmp[1] += yh;
-		g.tmp[2] += xv;
-		g.tmp[3] += yv;
-		if (sqrt(pow(g.tmp[0] - g.pl.p[0], 2) + pow(g.tmp[1] - g.pl.p[1], 2)) >
+		g.tmp[0] += xh - p.s / 2;
+		g.tmp[1] += yh - p.s / 2 + p.lu;
+		g.tmp[2] += xv - p.s / 2 + p.ll;
+		g.tmp[3] += yv - p.s / 2;
+
+		if (sqrt(pow(g.tmp[0] - g.pl.p[0], 2) + pow(g.tmp[1] - g.pl.p[1], 2)) >=
 		sqrt(pow(g.tmp[2] - g.pl.p[0], 2) + pow(g.tmp[3] - g.pl.p[1], 2)))
 		{
 			g.tmp[0] = g.tmp[2];
 			g.tmp[1] = g.tmp[3];
 		}
-		// int n = 0;
-		// while (n++<5)
-		// {
-		// 	if (g.m.a[(int)(g.tmp[0] + y) / g.m.ts][(int)(g.tmp[1] + x) / g.m.ts] == '0')
-		// 		x += g.m.ts * tan(ray),y += g.m.ts;
-		// 	ppii(&g, g.tmp[0] + y, g.tmp[1] + x, 0XFFFF00);
-				
-		// }
-		// break ;
 		
-		// g.tmp[0] = p.p[0] + p.s / 2 - g.sct[0] * i;
-		// g.tmp[1] = p.p[1] + p.s / 2 - g.sct[1] * i;
-		// int k = -1;
-		// while (++k <= i)
-		// {
-		// 	// printf("heeeeeeere %f %f\n", g.tmp[0], g.tmp[1]);
-		// 	g.tmp[0] = p.p[0] + p.s / 2 - g.sct[0] * k;
-		// 	g.tmp[1] = p.p[1] + p.s / 2 - g.sct[1] * k;
-		// 	if (g.tmp[0] / g.m.ts < g.m.col && g.tmp[1] / g.m.ts < g.m.row
-		// 	&& g.m.a[(int)g.tmp[1] / g.m.ts][(int)g.tmp[0] / g.m.ts] == '0' )
-		// 		{
-		// 			 ppii(&g, g.tmp[0], g.tmp[1], 0xFF0000);
-		// }}
+		sprite_rsort(&(g.sd), g.n_sp);
+		
 		i = -1;
 		double	raydistance = 0;
-		if (g.m.a[(int)(g.tmp[1] - 1) / g.m.ts][(int)(g.tmp[0]) / g.m.ts] == '1')
-			raydistance = sqrt(pow(g.tmp[0] - g.pl.p[0], 2)
-			+ pow(g.tmp[1] - 1 - g.pl.p[1], 2));
-		else
-			raydistance = sqrt(pow(g.tmp[0] - g.pl.p[0], 2)
-			+ pow(g.tmp[1] - g.pl.p[1], 2));
+		raydistance = sqrt(pow(g.tmp[0] - g.pl.p[0], 2)
+		+ pow(g.tmp[1] - g.pl.p[1], 2));
 		raydistance = raydistance * cos(g.pl.o - ray);
 		int		wallh = g.dpp * g.m.ts / raydistance;
 		// double gr = raydistance / (g.m.ts * 8) + 1;
@@ -231,23 +278,22 @@ void	drawplayer(t_pl p, t_g g)
 			else if (i > g.res[1] / 2 + wallh / 2)
 				ppii2(&g, j, i, g.m.fc);
 			else
+			{
+				if (g.tmp[0] != g.tmp[2])
 				{
-					if (g.tmp[0] == g.tmp[2])
-					{
-						if (g.m.a[(int)(g.tmp[1]) / g.m.ts][(int)(g.tmp[0]) / g.m.ts] == '1')
-							ppii2(&g, j, i, 0X00BB00);
-						else
-							ppii2(&g, j, i, 0X0000BB);
-					}
+					if (g.sct[1] > 0)
+						ppii2(&g, j, i, g.m.na[(int)g.tmp[0] % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64] + 100);
 					else
-					{
-						if (g.m.a[(int)(g.tmp[1]) / g.m.ts][(int)(g.tmp[0]) / g.m.ts] == '1')
-							ppii2(&g, j, i, 0X00BBBB);
-						else
-							ppii2(&g, j, i, 0XBB0000);
-					}
-					// 	// g.m.na[(int)g.tmp[0] % 64 + ((i - (g.res[1] - wallh) / 2) * 64 / wallh) * 64
+						ppii2(&g, j, i, g.m.na[(int)g.tmp[0] % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64]);
 				}
+				else
+				{
+					if (g.sct[0] > 0)
+						ppii2(&g, j, i, 0X00BBBB);
+					else
+						ppii2(&g, j, i, 0XBB0000);
+				}
+			}
 		}
 		ray -= g.sfr;
 	}
@@ -351,7 +397,7 @@ int	hi(t_g *g)
 	return (0);
 }
 
-t_g	new_game()
+t_g	new_game(void)
 {
 	t_g	g;
 
@@ -363,6 +409,7 @@ t_g	new_game()
 	g.m.cc = 0;
 	g.pe = 0;
 	g.a = 32;
+	g.n_sp = 0;
 	return (g);
 }
 
@@ -473,6 +520,7 @@ void		readdotcub(t_g *g, int fd)
 			|| l[0] != '1' || ocins("120NEWS ", l) || (g->m.col && g->m.col != ft_strlen(strdup_spe(l, ' ')))? exit(printf(EM)) : 0;
 			g->m.col ? 0 : (g->m.col = ft_strlen(strdup_spe(l, ' ')));
 			while (++i < ft_strlen(l))
+			{
 				if (chrinstr("NESW", l[i]))
 				{
 					if ((*g).pe)
@@ -482,6 +530,7 @@ void		readdotcub(t_g *g, int fd)
 					l[i] = '0';
 					(*g).pe++;
 				}
+			}
 			(*g).m.a[(*g).m.row++] = strdup_spe(l, ' ');
 			(*g).m.a[(*g).m.row] = 0;
 		}
