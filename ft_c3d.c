@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 20:50:34 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/04 18:39:08 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/07 11:12:02 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,10 +206,15 @@ void	drawplayer(t_pl p, t_g g)
 			{
 				int b = -1;
 				while(++b < g.n_sp)
-					if (g.sd[b].p[0] == (int)((g.tmp[3] + yv) / g.m.ts) && g.sd[b].p[1] == (int)((g.tmp[2] + xv) / g.m.ts))
+					if (g.sd[b].p[0] == (int)((g.tmp[3] + xv) / g.m.ts) && g.sd[b].p[1] == (int)((g.tmp[2] + yv) / g.m.ts))
 					{
-						if (g.sd[b].dst > sqrt(pow(g.tmp[2] - g.pl.p[0], 2) + pow(g.tmp[3] - g.pl.p[1], 2)))
-							g.sd[b].dst = sqrt(pow(g.tmp[2] - g.pl.p[0], 2) + pow(g.tmp[3] - g.pl.p[1], 2));
+						if (g.sd[b].dst > sqrt(pow((int)(g.tmp[2] + xv) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[0], 2)
+							+ pow((int)(g.tmp[3] + yv) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[1], 2)) * cos(ray - g.pl.o))
+						{
+							g.sd[b].dst = sqrt(pow((int)(g.tmp[2] + xv) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[0], 2)
+							+ pow((int)(g.tmp[3] + yv) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[1], 2)) * cos(ray - g.pl.o);
+							g.sd[b].spriteh = g.dpp * g.m.ts / g.sd[b].dst;
+						}
 						break;
 					}
 				if (b == g.n_sp)
@@ -218,7 +223,9 @@ void	drawplayer(t_pl p, t_g g)
 					t_s_array_realloc(&(g.sd), g.n_sp);
 					g.sd[g.n_sp - 1].p[0] = (int)((g.tmp[2] + xv) / g.m.ts);
 					g.sd[g.n_sp - 1].p[1] = (int)((g.tmp[3] + yv) / g.m.ts);
-					g.sd[g.n_sp - 1].dst = sqrt(pow(g.tmp[2] - g.pl.p[0], 2) + pow(g.tmp[3] - g.pl.p[1], 2));
+					g.sd[g.n_sp - 1].dst = sqrt(pow((int)(g.tmp[2] + xv) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[0], 2)
+					+ pow((int)(g.tmp[3] + yv) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[1], 2)) * cos(ray - g.pl.o);
+					g.sd[g.n_sp - 1].spriteh = g.dpp * g.m.ts / g.sd[g.n_sp - 1].dst;
 				}
 			}
 			yv += (g.m.ts / g.sct[2]) * (g.sct[0] < 0 ? 1 : -1);
@@ -232,19 +239,26 @@ void	drawplayer(t_pl p, t_g g)
 			{
 				int b = -1;
 				while(++b < g.n_sp)
-					if (g.sd[b].p[0] == (int)((g.tmp[0] + yh) / g.m.ts) && g.sd[b].p[1] == (int)((g.tmp[1] + xh) / g.m.ts))
+					if (g.sd[b].p[0] == (int)((g.tmp[0] + xh) / g.m.ts) && g.sd[b].p[1] == (int)((g.tmp[1] + yh) / g.m.ts))
 					{
-						if (g.sd[b].dst > sqrt(pow(g.tmp[0] - g.pl.p[0], 2) + pow(g.tmp[1] - g.pl.p[1], 2)))
-							g.sd[b].dst = sqrt(pow(g.tmp[0] - g.pl.p[0], 2) + pow(g.tmp[1] - g.pl.p[1], 2));
+						if (g.sd[b].dst > sqrt(pow((int)(g.tmp[0] + xh) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[0], 2)
+						+ pow((int)(g.tmp[1] + yh) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[1], 2)) * cos(ray - g.pl.o))
+						{
+							g.sd[b].dst = sqrt(pow((int)(g.tmp[0] + xh) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[0], 2)
+							+ pow((int)(g.tmp[1] + yh) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[1], 2)) * cos(ray - g.pl.o);
+							g.sd[b].spriteh = g.dpp * g.m.ts / g.sd[b].dst;
+						}
 						break;
 					}
 				if (b == g.n_sp)
 				{
 					g.n_sp++;
 					t_s_array_realloc(&(g.sd), g.n_sp);
-					g.sd[g.n_sp - 1].p[0] = (int)((g.tmp[0] + yh) / g.m.ts);
-					g.sd[g.n_sp - 1].p[1] = (int)((g.tmp[1] + xh) / g.m.ts);
-					g.sd[g.n_sp - 1].dst = sqrt(pow(g.tmp[0] - g.pl.p[0], 2) + pow(g.tmp[1] - g.pl.p[1], 2));
+					g.sd[g.n_sp - 1].p[0] = (int)((g.tmp[0] + xh) / g.m.ts);
+					g.sd[g.n_sp - 1].p[1] = (int)((g.tmp[1] + yh) / g.m.ts);
+					g.sd[g.n_sp - 1].dst = sqrt(pow((int)(g.tmp[0] + xh) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[0], 2)
+					+ pow((int)(g.tmp[1] + yh) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[1], 2)) * cos(ray - g.pl.o);
+					g.sd[g.n_sp - 1].spriteh = g.dpp * g.m.ts / g.sd[g.n_sp - 1].dst;
 				}
 			}
 			xh += g.m.ts * g.sct[2] * (g.sct[1] < 0 ? 1 : -1);
@@ -282,16 +296,28 @@ void	drawplayer(t_pl p, t_g g)
 				if (g.tmp[0] != g.tmp[2])
 				{
 					if (g.sct[1] > 0)
-						ppii2(&g, j, i, g.m.na[(int)g.tmp[0] % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64] + 100);
+						ppii2(&g, j, i, g.m.na[((int)g.tmp[0] + p.s / 2) % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64] + 100);
 					else
-						ppii2(&g, j, i, g.m.na[(int)g.tmp[0] % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64]);
+						ppii2(&g, j, i, g.m.na[63 - ((int)g.tmp[0] + p.s / 2) % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64]);
 				}
 				else
 				{
 					if (g.sct[0] > 0)
-						ppii2(&g, j, i, 0X00BBBB);
+						ppii2(&g, j, i, g.m.na[63 - ((int)g.tmp[1] + p.s / 2) % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64] + 300);
 					else
-						ppii2(&g, j, i, 0XBB0000);
+						ppii2(&g, j, i, g.m.na[((int)g.tmp[1] + p.s / 2) % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64] + 200);
+				}
+			}
+			int k = -1;
+			while(++k < g.n_sp)
+			{
+				if (i < (g.res[1] - g.sd[k].spriteh) / 2 || i > (g.res[1] / 2) + (g.sd[k].spriteh / 2) || g.sd[k].dst > raydistance)
+				{
+					continue;
+				}
+				else
+				{
+					ppii2(&g, j, i, g.m.na[((int)g.tmp[1] + p.s / 2) % 64 + ((i - (g.res[1] - g.sd[k].spriteh) / 2) * 63 / g.sd[k].spriteh) * 64]);
 				}
 			}
 		}

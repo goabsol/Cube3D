@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 11:41:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/04 12:39:07 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/05 12:10:13 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct	s_sprite
 {
 	int			p[2];
 	double		dst;
+	int			spriteh;
 }				t_s;
 
 typedef struct	s_game
