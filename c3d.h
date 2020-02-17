@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 11:41:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/17 18:51:08 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/17 23:17:13 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ typedef struct	s_sprite
 	double		cte;
 	double		dst;
 	double		dfc;
-	int			shift;
+	int			hvi;
 	int			sh;
 }				t_s;
 
