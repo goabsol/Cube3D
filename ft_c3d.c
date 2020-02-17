@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 20:50:34 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/07 11:12:02 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/17 22:13:19 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,8 +177,8 @@ void	drawplayer(t_pl p, t_g g)
 	{
 		g.sct[0] = sin(ray);
 		g.sct[1] = cos(ray);
-		// ray -= ((ray - M_PI_2 < 0.0000001 && ray - M_PI_2 > -0.0000001)
-		// || (ray + M_PI_2 < 0.0000001 && ray + M_PI_2 > -0.0000001) ? 0.0000001 : 0);
+		ray += ((ray - M_PI_2 < 0.0001 && ray - M_PI_2 > -0.0001)
+		|| (ray + M_PI_2 < 0.0001 && ray + M_PI_2 > -0.0001) ? 0.0001 : 0);
 		g.sct[2] = tan(ray);
 		p.ll = !!(g.sct[0] >= 0);
 		p.lr = !p.ll;
@@ -197,77 +197,42 @@ void	drawplayer(t_pl p, t_g g)
 		g.tmp[2] = floor(g.tmp[2] / g.m.ts) * g.m.ts + p.lr * g.m.ts;
 		g.tmp[3] = g.tmp[3] + (g.tmp[2] - (p.p[0] + p.s / 2)) / g.sct[2];
 
-		double xh =  0, yh = -p.lu, xv = -p.ll, yv = 0;
-		while ((g.tmp[2] + xv) < w && (g.tmp[3] + yv) < h
-		&& (g.tmp[2] + xv) > -1 && (g.tmp[3] + yv) > -1
-		&& !(g.m.a[(int)(g.tmp[3] + yv) / g.m.ts][(int)(g.tmp[2] + xv) / g.m.ts] == '1'))
+		g.tmp[2] -= p.ll;
+		g.tmp[1] -= p.lu;
+
+		while (g.tmp[2] < w && g.tmp[3] < h && g.tmp[2] > -1 && g.tmp[3] > -1
+		&& !(g.m.a[(int)(g.tmp[3]) / g.m.ts][(int)(g.tmp[2]) / g.m.ts] == '1'))
 		{
-			if (g.m.a[(int)((g.tmp[3] + yv) / g.m.ts)][(int)((g.tmp[2] + xv) / g.m.ts)] == '2')
+			if (g.m.a[(int)((g.tmp[3]) / g.m.ts)][(int)((g.tmp[2]) / g.m.ts)] == '2')
 			{
-				int b = -1;
-				while(++b < g.n_sp)
-					if (g.sd[b].p[0] == (int)((g.tmp[3] + xv) / g.m.ts) && g.sd[b].p[1] == (int)((g.tmp[2] + yv) / g.m.ts))
-					{
-						if (g.sd[b].dst > sqrt(pow((int)(g.tmp[2] + xv) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[0], 2)
-							+ pow((int)(g.tmp[3] + yv) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[1], 2)) * cos(ray - g.pl.o))
-						{
-							g.sd[b].dst = sqrt(pow((int)(g.tmp[2] + xv) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[0], 2)
-							+ pow((int)(g.tmp[3] + yv) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[1], 2)) * cos(ray - g.pl.o);
-							g.sd[b].spriteh = g.dpp * g.m.ts / g.sd[b].dst;
-						}
-						break;
-					}
-				if (b == g.n_sp)
-				{
-					g.n_sp++;
-					t_s_array_realloc(&(g.sd), g.n_sp);
-					g.sd[g.n_sp - 1].p[0] = (int)((g.tmp[2] + xv) / g.m.ts);
-					g.sd[g.n_sp - 1].p[1] = (int)((g.tmp[3] + yv) / g.m.ts);
-					g.sd[g.n_sp - 1].dst = sqrt(pow((int)(g.tmp[2] + xv) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[0], 2)
-					+ pow((int)(g.tmp[3] + yv) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[1], 2)) * cos(ray - g.pl.o);
-					g.sd[g.n_sp - 1].spriteh = g.dpp * g.m.ts / g.sd[g.n_sp - 1].dst;
-				}
+				t_s_array_realloc(&(g.sd), g.n_sp + 1);
+				g.sd[g.n_sp].c[0] = (int)g.tmp[2] / g.m.ts * g.m.ts + g.m.ts / 2;
+				g.sd[g.n_sp].c[1] = (int)g.tmp[3] / g.m.ts * g.m.ts + g.m.ts / 2;
+				g.sd[g.n_sp].shift = 0;
+				g.n_sp++;
 			}
-			yv += (g.m.ts / g.sct[2]) * (g.sct[0] < 0 ? 1 : -1);
-			xv += g.m.ts * (g.sct[0] < 0 ? 1 : -1);
+			g.tmp[3] += (g.m.ts / g.sct[2]) * (g.sct[0] < 0 ? 1 : -1);
+			g.tmp[2] += g.m.ts * (g.sct[0] < 0 ? 1 : -1);
 		}
-		while ((g.tmp[0] + xh) < w && (g.tmp[1] + yh) < h
-		&& (g.tmp[0] + xh) > -1 && (g.tmp[1] + yh) > -1
-		&& !(g.m.a[(int)((g.tmp[1] + yh) / g.m.ts)][(int)((g.tmp[0] + xh) / g.m.ts)] == '1'))
+		while (g.tmp[0] < w && g.tmp[1] < h
+		&& g.tmp[0] > -1 && g.tmp[1] > -1
+		&& !(g.m.a[(int)(g.tmp[1] / g.m.ts)][(int)(g.tmp[0] / g.m.ts)] == '1'))
 		{
-			if (g.m.a[(int)((g.tmp[1] + yh) / g.m.ts)][(int)((g.tmp[0] + xh) / g.m.ts)] == '2')
+			if (g.m.a[(int)(g.tmp[1] / g.m.ts)][(int)(g.tmp[0] / g.m.ts)] == '2')
 			{
-				int b = -1;
-				while(++b < g.n_sp)
-					if (g.sd[b].p[0] == (int)((g.tmp[0] + xh) / g.m.ts) && g.sd[b].p[1] == (int)((g.tmp[1] + yh) / g.m.ts))
-					{
-						if (g.sd[b].dst > sqrt(pow((int)(g.tmp[0] + xh) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[0], 2)
-						+ pow((int)(g.tmp[1] + yh) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[1], 2)) * cos(ray - g.pl.o))
-						{
-							g.sd[b].dst = sqrt(pow((int)(g.tmp[0] + xh) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[0], 2)
-							+ pow((int)(g.tmp[1] + yh) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[1], 2)) * cos(ray - g.pl.o);
-							g.sd[b].spriteh = g.dpp * g.m.ts / g.sd[b].dst;
-						}
-						break;
-					}
-				if (b == g.n_sp)
-				{
-					g.n_sp++;
-					t_s_array_realloc(&(g.sd), g.n_sp);
-					g.sd[g.n_sp - 1].p[0] = (int)((g.tmp[0] + xh) / g.m.ts);
-					g.sd[g.n_sp - 1].p[1] = (int)((g.tmp[1] + yh) / g.m.ts);
-					g.sd[g.n_sp - 1].dst = sqrt(pow((int)(g.tmp[0] + xh) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[0], 2)
-					+ pow((int)(g.tmp[1] + yh) / (g.m.ts / 2) * (g.m.ts / 2) - g.pl.p[1], 2)) * cos(ray - g.pl.o);
-					g.sd[g.n_sp - 1].spriteh = g.dpp * g.m.ts / g.sd[g.n_sp - 1].dst;
-				}
+				t_s_array_realloc(&(g.sd), g.n_sp + 1);
+				g.sd[g.n_sp].c[0] = (int)g.tmp[0] / g.m.ts * g.m.ts + g.m.ts / 2;
+				g.sd[g.n_sp].c[1] = (int)g.tmp[1] / g.m.ts * g.m.ts + g.m.ts / 2;
+				g.sd[g.n_sp].shift = 0;
+				g.n_sp++;
 			}
-			xh += g.m.ts * g.sct[2] * (g.sct[1] < 0 ? 1 : -1);
-			yh += g.m.ts * (g.sct[1] < 0 ? 1 : -1);
+			g.tmp[0] += g.m.ts * g.sct[2] * (g.sct[1] < 0 ? 1 : -1);
+			g.tmp[1] += g.m.ts * (g.sct[1] < 0 ? 1 : -1);
 		}
-		g.tmp[0] += xh - p.s / 2;
-		g.tmp[1] += yh - p.s / 2 + p.lu;
-		g.tmp[2] += xv - p.s / 2 + p.ll;
-		g.tmp[3] += yv - p.s / 2;
+		g.tmp[0] += -p.s / 2;
+		g.tmp[1] += -p.s / 2 + p.lu;
+		g.tmp[2] += -p.s / 2 + p.ll;
+		g.tmp[3] += -p.s / 2;
 
 		if (sqrt(pow(g.tmp[0] - g.pl.p[0], 2) + pow(g.tmp[1] - g.pl.p[1], 2)) >=
 		sqrt(pow(g.tmp[2] - g.pl.p[0], 2) + pow(g.tmp[3] - g.pl.p[1], 2)))
@@ -295,29 +260,40 @@ void	drawplayer(t_pl p, t_g g)
 			{
 				if (g.tmp[0] != g.tmp[2])
 				{
-					if (g.sct[1] > 0)
+					if (p.lu)
 						ppii2(&g, j, i, g.m.na[((int)g.tmp[0] + p.s / 2) % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64] + 100);
 					else
-						ppii2(&g, j, i, g.m.na[63 - ((int)g.tmp[0] + p.s / 2) % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64]);
+						ppii2(&g, j, i, g.m.soa[63 - ((int)g.tmp[0] + p.s / 2) % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64]);
 				}
 				else
 				{
-					if (g.sct[0] > 0)
-						ppii2(&g, j, i, g.m.na[63 - ((int)g.tmp[1] + p.s / 2) % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64] + 300);
+					if (p.ll)
+						ppii2(&g, j, i, g.m.eaa[63 - ((int)g.tmp[1] + p.s / 2) % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64]);
 					else
-						ppii2(&g, j, i, g.m.na[((int)g.tmp[1] + p.s / 2) % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64] + 200);
+						ppii2(&g, j, i, g.m.wea[((int)g.tmp[1] + p.s / 2) % 64 + ((i - (g.res[1] - wallh) / 2) * 63 / wallh) * 64] + 200);
 				}
 			}
 			int k = -1;
 			while(++k < g.n_sp)
 			{
-				if (i < (g.res[1] - g.sd[k].spriteh) / 2 || i > (g.res[1] / 2) + (g.sd[k].spriteh / 2) || g.sd[k].dst > raydistance)
-				{
+				g.sd[k].pcls = ((p.p[1] + p.s / 2) - g.sd[k].c[1]) / ((p.p[0] + p.s / 2) - g.sd[k].c[0]);
+				g.sd[k].cte = g.sd[k].c[0] / g.sd[k].pcls + g.sd[k].c[1];
+				g.sd[k].p[0] = (g.sd[k].cte - ((p.p[1] + p.s / 2) - (p.p[0] + p.s / 2) / g.sct[2])) / (1 / g.sct[2] + 1 / g.sd[k].pcls);
+				g.sd[k].p[1] = g.sd[k].p[0] / g.sct[2] + (p.p[1] + p.s / 2) - (p.p[0] + p.s / 2) / g.sct[2];
+				g.sd[k].s[0] = g.sd[k].c[0] + 32 * cos (M_PI + atan(1 / g.sd[k].pcls));
+				g.sd[k].s[1] = g.sd[k].c[1] + 32 * sin (M_PI + atan(1 / g.sd[k].pcls));
+				if (!g.sd[k].shift)
+					printf("C(%.2f, %.2f) S(%.2f, %.2f) %d\n", g.sd[k].c[0], g.sd[k].c[1], g.sd[k].s[0], g.sd[k].s[1], (int)sqrt(pow(g.sd[k].s[0] - g.sd[k].p[0], 2) + pow(g.sd[k].s[1]  - g.sd[k].p[1], 2))),g.sd[k].shift++;
+				g.sd[k].dst = sqrt(pow(g.sd[k].c[0] - p.p[0] - p.s / 2, 2)
+				+ pow(g.sd[k].c[1] - p.p[1] - p.s / 2, 2));
+				g.sd[k].sh = g.dpp * g.m.ts / g.sd[k].dst;
+				g.sd[k].dfc = sqrt(pow(g.sd[k].s[0] - g.sd[k].p[0], 2) + pow(g.sd[k].s[1] - g.sd[k].p[1], 2));
+				if (i < (g.res[1] - g.sd[k].sh) / 2 || i > (g.res[1] / 2) +
+				(g.sd[k].sh / 2) || g.sd[k].dst > raydistance)
 					continue;
-				}
-				else
+				else if (g.sd[k].dfc <= 63 && g.sd[k].dfc >= 0)
 				{
-					ppii2(&g, j, i, g.m.na[((int)g.tmp[1] + p.s / 2) % 64 + ((i - (g.res[1] - g.sd[k].spriteh) / 2) * 63 / g.sd[k].spriteh) * 64]);
+					ppii2(&g, j, i, g.m.sa[(int)g.sd[k].dfc + ((i - (g.res[1] - g.sd[k].sh) / 2) * 63 / g.sd[k].sh) * 64]);
 				}
 			}
 		}
@@ -396,8 +372,10 @@ int	hi(t_g *g)
 	g->pl.coll[1] = 0;
 	// drawmap(g->m, g);
 	g->pl.o += (g->pl.t[1] - g->pl.t[0]) * M_PI * g->pl.rs / 180;
-	tmp[0] = g->pl.p[0] + ((g->pl.w[1] - g->pl.w[0]) * g->pl.ms * sin(g->pl.o));
-	tmp[1] = g->pl.p[1] + ((g->pl.w[1] - g->pl.w[0]) * g->pl.ms * cos(g->pl.o));
+	tmp[0] = g->pl.p[0] + ((g->pl.w[1] - g->pl.w[0]) * g->pl.ms * sin(g->pl.o))
+	- ((g->pl.w[3] - g->pl.w[2]) * g->pl.ms * cos(g->pl.o));
+	tmp[1] = g->pl.p[1] + ((g->pl.w[1] - g->pl.w[0]) * g->pl.ms * cos(g->pl.o))
+	+ ((g->pl.w[3] - g->pl.w[2]) * g->pl.ms * sin(g->pl.o));
 	while (++i < g->pl.s)
 	{
 		if (g->m.a[((int)tmp[1] + i) / g->m.ts][(int)g->pl.p[0] / g->m.ts] == '1' ||
@@ -426,7 +404,11 @@ int	hi(t_g *g)
 t_g	new_game(void)
 {
 	t_g	g;
+	int	i;
 
+	i = -1;
+	while (++i < 8)
+		g.checklist[i] = 0;
 	g.m = new_m();
 	g.tb.p = mlx_init();
 	g.res[0] = 0;
@@ -449,45 +431,54 @@ int			stlen(char **t)
 	return (i);
 }
 
+int			count(char *s, char c)
+{
+	int		i;
+
+	i = 0;
+	if (!s)
+		return (0);
+	while (*s++)
+		i += ((*s) == c ? 1 : 0);
+	return (i);
+}
+
 void		distribution(t_g *g, char **t)
 {
 	char	**tt;
 
 	if (!ft_strcmp(t[0], "R"))
 	{
-		stlen(t) != 3 || ocins("0123456789", t[1]) || ocins("0123456789", t[2]) || ((*g).res[0] = ft_atoi(t[1])) <= 0 || ((*g).res[1] +=
-		ft_atoi(t[2])) <= 0 ? exit(printf(ER)) : 0;
+		stlen(t) != 3 || ocins("0123456789", t[1]) || ocins("0123456789", t[2]) || ((*g).res[0] = MIN(ft_atoi(t[1]), 2560)) <= 0 || ((*g).res[1] += MIN(ft_atoi(t[2]), 1440)) <= 0 || (g->checklist[0])++ ? exit(printf(ER)) : 0;
 	}
 	else if (!ft_strcmp(t[0], "NO"))
 	{
-		stlen(t) != 2 || !((*g).m.nt = mlx_xpm_file_to_image((*g).tb.p, t[1], &((*g).a), &((*g).a))) ? exit(printf(ET)) : 0;
+		stlen(t) != 2 || !((*g).m.nt = mlx_xpm_file_to_image((*g).tb.p, t[1], &((*g).a), &((*g).a))) || (g->checklist[1])++ ? exit(printf(ET)) : 0;
 	}
 	else if (!ft_strcmp(t[0], "EA"))
 	{
-		stlen(t) != 2 || !((*g).m.eat = mlx_xpm_file_to_image((*g).tb.p, t[1], &((*g).a), &((*g).a))) ? exit(printf(ET)) : 0;
+		stlen(t) != 2 || !((*g).m.eat = mlx_xpm_file_to_image((*g).tb.p, t[1], &((*g).a), &((*g).a))) || (g->checklist[2])++ ? exit(printf(ET)) : 0;
 	}
 	else if (!ft_strcmp(t[0], "SO"))
 	{
-		stlen(t) != 2 || !((*g).m.sot = mlx_xpm_file_to_image((*g).tb.p, t[1], &((*g).a), &((*g).a))) ? exit(printf(ET)) : 0;
+		stlen(t) != 2 || !((*g).m.sot = mlx_xpm_file_to_image((*g).tb.p, t[1], &((*g).a), &((*g).a))) || (g->checklist[3])++ ? exit(printf(ET)) : 0;
 	}
 	else if (!ft_strcmp(t[0], "WE"))
 	{
-		stlen(t) != 2 || !((*g).m.wet = mlx_xpm_file_to_image((*g).tb.p, t[1], &((*g).a), &((*g).a))) ? exit(printf(ET)) : 0;
+		stlen(t) != 2 || !((*g).m.wet = mlx_xpm_file_to_image((*g).tb.p, t[1], &((*g).a), &((*g).a))) || (g->checklist[4])++ ? exit(ps(ET)) : 0;
 	}
 	else if (!ft_strcmp(t[0], "S"))
 	{
-		stlen(t) != 2 || !((*g).m.st = mlx_xpm_file_to_image((*g).tb.p, t[1], &((*g).a), &((*g).a))) ? exit(printf(ET)) : 0;
+		stlen(t) != 2 || !((*g).m.st = mlx_xpm_file_to_image((*g).tb.p, t[1], &((*g).a), &((*g).a))) || (g->checklist[5])++ ? exit(printf(ET)) : 0;
 	}
 	else if (!ft_strcmp(t[0], "F"))
 	{
-		stlen(t) != 2 || ocins("0123456789,", t[1]) || stlen(tt = ft_split(t[1], ',')) != 3 || ft_atoi(tt[0]) < 0 || ft_atoi(tt[1]) < 0 || ft_atoi(tt[2]) < 0
-		? exit(printf(ECF)) : 0;
+		stlen(t) != 2 || ocins("0123456789,", t[1]) || count(t[1], ',') != 2 || stlen(tt = ft_split(t[1], ',')) != 3 || ft_atoi(tt[0]) < 0 || ft_atoi(tt[1]) < 0 || ft_atoi(tt[2]) < 0 || (g->checklist[6])++ ? exit(printf(ECF)) : 0;
 		(*g).m.fc = ft_atoi(tt[0]) * (size_t)pow(16, 4) + ft_atoi(tt[1]) * (size_t)pow(16, 2) + ft_atoi(tt[2]);
 	}
 	else if (!ft_strcmp(t[0], "C"))
 	{
-		stlen(t) != 2 || ocins("0123456789,", t[1]) || stlen(tt = ft_split(t[1], ',')) != 3 || ft_atoi(tt[0]) < 0 || ft_atoi(tt[1]) < 0 || ft_atoi(tt[2]) < 0
-		? exit(printf(ECF)) : 0;
+		stlen(t) != 2 || ocins("0123456789,", t[1]) || count(t[1], ',') != 2 || stlen(tt = ft_split(t[1], ',')) != 3 || ft_atoi(tt[0]) < 0 || ft_atoi(tt[1]) < 0 || ft_atoi(tt[2]) < 0 || (g->checklist[7])++ ? exit(printf(ECF)) : 0;
 		(*g).m.cc = ft_atoi(tt[0]) * (size_t)pow(16, 4) + ft_atoi(tt[1]) * (size_t)pow(16, 2) + ft_atoi(tt[2]);
 	}
 	else
@@ -534,17 +525,17 @@ void		readdotcub(t_g *g, int fd)
 	{
 		f = get_next_line(fd, &l);
 		l = ft_strtrim(l, " ");
-		if (!(l[0]))
-			continue;
 		t = ft_split(l, ' ');
-		if (chrinstr("RNESWFC", l[0]) && (c++ || 1))
+		if (chrinstr("RNESWFC", l[0]) && c++ < 8)
 			distribution(g, t);
 		else if (c == 8)
 		{
+			if (l[0] != '1' && !(g->m.row))
+				continue ;
 			ft_array_realloc(&(*g).m.a, (*g).m.row + 2);
-			((!f || !(*g).m.row) && ocins("1 ", l)) || l[ft_strlen(l) - 1] != '1'
-			|| l[0] != '1' || ocins("120NEWS ", l) || (g->m.col && g->m.col != ft_strlen(strdup_spe(l, ' ')))? exit(printf(EM)) : 0;
 			g->m.col ? 0 : (g->m.col = ft_strlen(strdup_spe(l, ' ')));
+			(((!f || !(*g).m.row) && ocins("1 ", l)) || l[ft_strlen(l) - 1] != '1'
+			|| l[0] != '1' || ocins("120NEWS ", l) || (g->m.col && g->m.col != ft_strlen(strdup_spe(l, ' '))) ? exit(printf(EM)) : 0);
 			while (++i < ft_strlen(l))
 			{
 				if (chrinstr("NESW", l[i]))
@@ -560,8 +551,14 @@ void		readdotcub(t_g *g, int fd)
 			(*g).m.a[(*g).m.row++] = strdup_spe(l, ' ');
 			(*g).m.a[(*g).m.row] = 0;
 		}
+		else if (l[0])
+		{
+			exit(ps(EC));
+		}
 		if (!f)
+		{
 			break ;
+		}
 	}
 	!g->pe ? exit(printf(EM)) : 0;
 	if (!(chrinstr("RNESWFC1", l[0])) || c != 8)
@@ -579,6 +576,10 @@ int		main(int a, char **b)
 	g.tb.p = mlx_init();
 	readdotcub(&g, fd);
 	g.m.na = (int *)mlx_get_data_addr(g.m.nt, &g.yuzless, &g.yuzless, &g.yuzless);
+	g.m.eaa = (int *)mlx_get_data_addr(g.m.eat, &g.yuzless, &g.yuzless, &g.yuzless);
+	g.m.wea = (int *)mlx_get_data_addr(g.m.wet, &g.yuzless, &g.yuzless, &g.yuzless);
+	g.m.soa = (int *)mlx_get_data_addr(g.m.sot, &g.yuzless, &g.yuzless, &g.yuzless);
+	g.m.sa = (int *)mlx_get_data_addr(g.m.st, &g.yuzless, &g.yuzless, &g.yuzless);
 	g.dpp = (g.res[0] / 2) / tan((60 * M_PI / 180) / 2);
 	g.sfr = (M_PI / 3) / g.res[0];
 	g.pi_6 = M_PI / 6;

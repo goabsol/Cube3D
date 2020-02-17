@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 11:41:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/05 12:10:13 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/17 18:51:08 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # define ECF "Error\nWrong Color format\n"
 # define EC "Error\nINVALID .cub\n"
 # define EM "Error\nInvalid Map\n"
+# define MIN(a,b) (((a)<(b))?(a):(b))
+# define MAX(a,b) (((a)>(b))?(a):(b))
 
 char			**ft_split(char const *s, char c);
 int				ft_strcmp(const char *s1, const char *s2);
@@ -27,6 +29,7 @@ size_t			ft_strlcpy(char *dst, const char *src, size_t s);
 int				ft_atoi(const char *s);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 char			*ft_strtrim(char const *s1, char const *set);
+int 			ps(char *str);
 
 typedef struct	s_toolbox
 {
@@ -74,18 +77,24 @@ typedef struct	s_player
 	int			ld;
 	int			lr;
 	int			ll;
-	
 }				t_pl;
 
 typedef struct	s_sprite
 {
-	int			p[2];
+	double		p[2];
+	double		c[2];
+	double		s[2];
+	double		pcls;
+	double		cte;
 	double		dst;
-	int			spriteh;
+	double		dfc;
+	int			shift;
+	int			sh;
 }				t_s;
 
 typedef struct	s_game
 {
+	int			checklist[8];
 	int			res[2];
 	t_tb		tb;
 	t_pl		pl;
@@ -103,6 +112,3 @@ typedef struct	s_game
 }				t_g;
 
 #endif
-
-			
-
