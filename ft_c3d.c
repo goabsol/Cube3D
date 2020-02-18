@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 20:50:34 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/17 23:29:04 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/18 02:12:03 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_pl	new_plr(size_t x, t_m m, int a)
 	plr.s = m.ts / 2;
 	plr.p[0] = x * m.ts + m.ts / 2;
 	plr.p[1] = m.row * m.ts + m.ts / 2;
-	plr.ms = m.ts / 8;
+	plr.ms = m.ts / 32;
 	plr.rs = 2;
 	plr.w[0] = 0;
 	plr.w[1] = 0;
@@ -287,20 +287,31 @@ void	drawplayer(t_pl p, t_g g)
 					continue;
 				if (g.sd[k].dfc <= 32)
 				{
-					if (g.sd[k].hvi)
-					{
-						if (p.ll)
-							ppii2(&g, j, i, 0X00F0FF);
-						else
-							ppii2(&g, j, i, 0XFFF000);
-					}
+					int a = atan2(g.sd[k].c[1] - g.sd[k].p[1], g.sd[k].c[0] - g.sd[k].p[0]) < 0;
+					if ((p.p[0] < g.sd[k].c[0]))
+						a = !a;
+					if(a)
+						ppii2(&g, j, i, 0XFF0000);
 					else
 					{
-						if (p.lu)
-							ppii2(&g, j, i, 0X0000FF);
-						else
-							ppii2(&g, j, i, 0XFF0000);
+						ppii2(&g, j, i, 0X0000FF);
 					}
+					
+					
+					// if (g.sd[k].hvi)
+					// {
+					// 	if (p.ll)
+					// 		ppii2(&g, j, i, 0X00F0FF);
+					// 	else
+					// 		ppii2(&g, j, i, 0XFFF000);
+					// }
+					// else
+					// {
+					// 	if (p.lu)
+					// 		ppii2(&g, j, i, 0X0000FF);
+					// 	else
+					// 		ppii2(&g, j, i, 0XFF0000);
+					// }
 				}//g.m.sa[(int)g.sd[k].dfc + g.m.ts / 2 + ((i - (g.res[1] - g.sd[k].sh) / 2) * 63 / g.sd[k].sh) * 64]
 			}
 		}
