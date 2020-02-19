@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 20:50:34 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/18 02:12:03 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/19 07:25:12 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ t_pl	new_plr(size_t x, t_m m, int a)
 {
 	t_pl	plr;
 
-	plr.s = m.ts / 2;
+	plr.s = m.ts / 8;
 	plr.p[0] = x * m.ts + m.ts / 2;
 	plr.p[1] = m.row * m.ts + m.ts / 2;
-	plr.ms = m.ts / 32;
+	plr.ms = m.ts / 8;
 	plr.rs = 2;
 	plr.w[0] = 0;
 	plr.w[1] = 0;
@@ -177,43 +177,22 @@ void	drawplayer(t_pl p, t_g g)
 	{
 		g.sct[0] = sin(ray);
 		g.sct[1] = cos(ray);
-		ray += ((ray - M_PI_2 < 0.0001 && ray - M_PI_2 > -0.0001)
-		|| (ray + M_PI_2 < 0.0001 && ray + M_PI_2 > -0.0001) ? 0.0001 : 0);
+		// ray += ((ray - M_PI_2 < 0.0001 && ray - M_PI_2 > -0.0001)
+		// || (ray + M_PI_2 < 0.0001 && ray + M_PI_2 > -0.0001) ? 0.0001 : 0);
 		g.sct[2] = tan(ray);
 		p.ll = !!(g.sct[0] >= 0);
 		p.lr = !p.ll;
 		p.lu = !!(g.sct[1] >= 0);
 		p.ld = !p.lu;
-		// while (++i < 250)
-		// 	ppii(&g, (int)(p.p[0] - sct[0] * i + p.s / 2),
-		// 	(int)(p.p[1] - g.sct[1] * i + p.s / 2), 0xFF0000);
-		g.tmp[0] = p.p[0];
-		g.tmp[1] = p.p[1];
-		g.tmp[2] = p.p[0];
-		g.tmp[3] = p.p[1];
 
-		g.tmp[1] = floor(g.tmp[1] / g.m.ts) * g.m.ts + p.ld * g.m.ts;
-		g.tmp[0] = g.tmp[0] + (g.tmp[1] - (p.p[1])) * g.sct[2];
-		g.tmp[2] = floor(g.tmp[2] / g.m.ts) * g.m.ts + p.lr * g.m.ts;
-		g.tmp[3] = g.tmp[3] + (g.tmp[2] - (p.p[0])) / g.sct[2];
+		g.tmp[1] = floor(p.p[1] / g.m.ts) * g.m.ts + p.ld * g.m.ts;
+		g.tmp[0] = p.p[0] + (g.tmp[1] - (p.p[1])) * g.sct[2];
+		g.tmp[2] = floor(p.p[0] / g.m.ts) * g.m.ts + p.lr * g.m.ts;
+		g.tmp[3] = p.p[1] + (g.tmp[2] - (p.p[0])) / g.sct[2];
 
 		g.tmp[2] -= p.ll;
 		g.tmp[1] -= p.lu;
 
-		while (g.tmp[2] < w && g.tmp[3] < h && g.tmp[2] > -1 && g.tmp[3] > -1
-		&& !(g.m.a[(int)(g.tmp[3]) / g.m.ts][(int)(g.tmp[2]) / g.m.ts] == '1'))
-		{
-			if (g.m.a[(int)((g.tmp[3]) / g.m.ts)][(int)((g.tmp[2]) / g.m.ts)] == '2')
-			{
-				t_s_array_realloc(&(g.sd), g.n_sp + 1);
-				g.sd[g.n_sp].c[0] = (int)g.tmp[2] / g.m.ts * g.m.ts + g.m.ts / 2;
-				g.sd[g.n_sp].c[1] = (int)g.tmp[3] / g.m.ts * g.m.ts + g.m.ts / 2;
-				g.sd[g.n_sp].hvi = 1;
-				g.n_sp++;
-			}
-			g.tmp[3] += (g.m.ts / g.sct[2]) * (g.sct[0] < 0 ? 1 : -1);
-			g.tmp[2] += g.m.ts * (g.sct[0] < 0 ? 1 : -1);
-		}
 		while (g.tmp[0] < w && g.tmp[1] < h
 		&& g.tmp[0] > -1 && g.tmp[1] > -1
 		&& !(g.m.a[(int)(g.tmp[1] / g.m.ts)][(int)(g.tmp[0] / g.m.ts)] == '1'))
@@ -223,11 +202,35 @@ void	drawplayer(t_pl p, t_g g)
 				t_s_array_realloc(&(g.sd), g.n_sp + 1);
 				g.sd[g.n_sp].c[0] = (int)g.tmp[0] / g.m.ts * g.m.ts + g.m.ts / 2;
 				g.sd[g.n_sp].c[1] = (int)g.tmp[1] / g.m.ts * g.m.ts + g.m.ts / 2;
+				g.sd[g.n_sp].dst = sqrt(pow(g.sd[g.n_sp].c[0] - p.p[0], 2) + pow(g.sd[g.n_sp].c[1] - p.p[1], 2));
+				g.sd[g.n_sp].p[0] = p.p[0] - g.sct[0] * g.sd[g.n_sp].dst;
+				g.sd[g.n_sp].p[1] = p.p[1] - g.sct[1] * g.sd[g.n_sp].dst;
+				g.sd[g.n_sp].sh = g.dpp * g.m.ts / g.sd[g.n_sp].dst;
+				g.sd[g.n_sp].dfc = sqrt(pow(g.sd[g.n_sp].c[0] - g.sd[g.n_sp].p[0], 2) + pow(g.sd[g.n_sp].c[1] - g.sd[g.n_sp].p[1], 2));
 				g.sd[g.n_sp].hvi = 0;
 				g.n_sp++;
 			}
 			g.tmp[0] += g.m.ts * g.sct[2] * (g.sct[1] < 0 ? 1 : -1);
 			g.tmp[1] += g.m.ts * (g.sct[1] < 0 ? 1 : -1);
+		}
+		while (g.tmp[2] < w && g.tmp[3] < h && g.tmp[2] >= 0 && g.tmp[3] >= 0
+		&& !(g.m.a[(int)(g.tmp[3]) / g.m.ts][(int)(g.tmp[2]) / g.m.ts] == '1'))
+		{
+			if (g.m.a[(int)((g.tmp[3]) / g.m.ts)][(int)((g.tmp[2]) / g.m.ts)] == '2')
+			{
+				t_s_array_realloc(&(g.sd), g.n_sp + 1);
+				g.sd[g.n_sp].c[0] = (int)g.tmp[2] / g.m.ts * g.m.ts + g.m.ts / 2;
+				g.sd[g.n_sp].c[1] = (int)g.tmp[3] / g.m.ts * g.m.ts + g.m.ts / 2;
+				g.sd[g.n_sp].dst = sqrt(pow(g.sd[g.n_sp].c[0] - p.p[0], 2) + pow(g.sd[g.n_sp].c[1] - p.p[1], 2));
+				g.sd[g.n_sp].p[0] = p.p[0] - g.sct[0] * g.sd[g.n_sp].dst;
+				g.sd[g.n_sp].p[1] = p.p[1] - g.sct[1] * g.sd[g.n_sp].dst;
+				g.sd[g.n_sp].sh = g.dpp * g.m.ts / g.sd[g.n_sp].dst;
+				g.sd[g.n_sp].dfc = sqrt(pow(g.sd[g.n_sp].c[0] - g.sd[g.n_sp].p[0], 2) + pow(g.sd[g.n_sp].c[1] - g.sd[g.n_sp].p[1], 2));
+				g.sd[g.n_sp].hvi = 1;
+				g.n_sp++;
+			}
+			g.tmp[3] += (g.m.ts / g.sct[2]) * (g.sct[0] < 0 ? 1 : -1);
+			g.tmp[2] += g.m.ts * (g.sct[0] < 0 ? 1 : -1);
 		}
 		
 		g.tmp[1] += p.lu;
@@ -275,45 +278,26 @@ void	drawplayer(t_pl p, t_g g)
 			}
 			int k = -1;
 			while(++k < g.n_sp)
-			{
-				g.sd[k].dst = sqrt(pow(g.sd[k].c[0] - p.p[0], 2) + pow(g.sd[k].c[1] - p.p[1], 2));
-				g.sd[k].p[0] = p.p[0] - sin(ray) * g.sd[k].dst;
-				g.sd[k].p[1] = p.p[1] - cos(ray) * g.sd[k].dst;
-				// printf("%f %f %f %f\n", g.sd[k].p[0], g.sd[k].p[1], g.sd[k].c[0], g.sd[k].c[1]);
-				g.sd[k].sh = g.dpp * g.m.ts / g.sd[k].dst;
-				g.sd[k].dfc = sqrt(pow(g.sd[k].c[0] - g.sd[k].p[0], 2) + pow(g.sd[k].c[1] - g.sd[k].p[1], 2));
-				if (i < (g.res[1] - g.sd[k].sh) / 2 || i > (g.res[1] / 2) +
-				(g.sd[k].sh / 2) || g.sd[k].dst > raydistance)
-					continue;
-				if (g.sd[k].dfc <= 32)
+				if (i >= (g.res[1] - g.sd[k].sh) / 2 && i <= (g.res[1] / 2) +
+				(g.sd[k].sh / 2) && g.sd[k].dst <= raydistance && g.sd[k].dfc <= 32)
 				{
-					int a = atan2(g.sd[k].c[1] - g.sd[k].p[1], g.sd[k].c[0] - g.sd[k].p[0]) < 0;
-					if ((p.p[0] < g.sd[k].c[0]))
-						a = !a;
-					if(a)
-						ppii2(&g, j, i, 0XFF0000);
+					if((g.sd[k].p[0] > g.sd[k].c[0] && p.lu) || (g.sd[k].p[0] < g.sd[k].c[0] && p.ld))
+					{
+						if((g.sd[k].p[1] < p.p[1] && p.p[1] < g.sd[k].c[1] && p.lr) ||
+							(g.sd[k].p[1] > p.p[1] - 1 && p.p[1] > g.sd[k].c[1] && p.ll))
+							ppii2(&g, j, i, g.m.sa[(int)g.sd[k].dfc + g.m.ts / 2 + ((i - (g.res[1] - g.sd[k].sh) / 2) * 63 / g.sd[k].sh) * 64]);
+						else
+							ppii2(&g, j, i, g.m.sa[63 - ((int)g.sd[k].dfc + g.m.ts / 2) + ((i - (g.res[1] - g.sd[k].sh) / 2) * 63 / g.sd[k].sh) * 64]);
+					}
 					else
 					{
-						ppii2(&g, j, i, 0X0000FF);
+						if ((g.sd[k].p[1] > p.p[1] && p.p[1] > g.sd[k].c[1] && p.lr) ||
+							(g.sd[k].p[1] < p.p[1] + 1 && p.p[1] < g.sd[k].c[1] && p.ll))
+							ppii2(&g, j, i, g.m.sa[63 - ((int)g.sd[k].dfc + g.m.ts / 2) + ((i - (g.res[1] - g.sd[k].sh) / 2) * 63 / g.sd[k].sh) * 64]);
+						else
+							ppii2(&g, j, i, g.m.sa[(int)g.sd[k].dfc + g.m.ts / 2 + ((i - (g.res[1] - g.sd[k].sh) / 2) * 63 / g.sd[k].sh) * 64]);
 					}
-					
-					
-					// if (g.sd[k].hvi)
-					// {
-					// 	if (p.ll)
-					// 		ppii2(&g, j, i, 0X00F0FF);
-					// 	else
-					// 		ppii2(&g, j, i, 0XFFF000);
-					// }
-					// else
-					// {
-					// 	if (p.lu)
-					// 		ppii2(&g, j, i, 0X0000FF);
-					// 	else
-					// 		ppii2(&g, j, i, 0XFF0000);
-					// }
-				}//g.m.sa[(int)g.sd[k].dfc + g.m.ts / 2 + ((i - (g.res[1] - g.sd[k].sh) / 2) * 63 / g.sd[k].sh) * 64]
-			}
+				}
 		}
 		ray -= g.sfr;
 	}
@@ -385,26 +369,26 @@ int	hi(t_g *g)
 	// g->tb.i_a = (int *)mlx_get_data_addr(g->tb.i, &g->yuzless, &g->yuzless, &g->yuzless);
 	g->tb.bi = mlx_new_image(g->tb.p, g->res[0], g->res[1]);
 	g->tb.bi_a = (int *)mlx_get_data_addr(g->tb.bi, &g->yuzless, &g->yuzless, &g->yuzless);
-	i = -1;
+	i = -g->pl.s / 2;
 	g->pl.coll[0] = 0;
 	g->pl.coll[1] = 0;
 	// drawmap(g->m, g);
-	g->pl.o += (g->pl.t[1] - g->pl.t[0]) * M_PI * g->pl.rs / 180;
+	g->pl.o += (g->pl.t[1] - g->pl.t[0]) * g->dtr * g->pl.rs;
 	tmp[0] = g->pl.p[0] + ((g->pl.w[1] - g->pl.w[0]) * g->pl.ms * sin(g->pl.o))
 	- ((g->pl.w[3] - g->pl.w[2]) * g->pl.ms * cos(g->pl.o));
 	tmp[1] = g->pl.p[1] + ((g->pl.w[1] - g->pl.w[0]) * g->pl.ms * cos(g->pl.o))
 	+ ((g->pl.w[3] - g->pl.w[2]) * g->pl.ms * sin(g->pl.o));
-	while (++i < g->pl.s)
+	while (++i < g->pl.s / 2)
 	{
 		if (g->m.a[((int)tmp[1] + i) / g->m.ts][(int)g->pl.p[0] / g->m.ts] == '1' ||
 		g->m.a[(int)tmp[1] / g->m.ts][((int)g->pl.p[0] + i) / g->m.ts] == '1' ||
-		g->m.a[((int)tmp[1] + i) / g->m.ts][((int)g->pl.p[0] + g->pl.s - 1) / g->m.ts] == '1' ||
-		g->m.a[((int)tmp[1] + g->pl.s - 1) / g->m.ts][((int)g->pl.p[0] + i) / g->m.ts] == '1')
+		g->m.a[((int)tmp[1] + i) / g->m.ts][((int)g->pl.p[0] + g->pl.s / 2 - 1) / g->m.ts] == '1' ||
+		g->m.a[((int)tmp[1] + g->pl.s / 2 - 1) / g->m.ts][((int)g->pl.p[0] + i) / g->m.ts] == '1')
 			g->pl.coll[1] = 1;
 		if (g->m.a[((int)g->pl.p[1] + i) / g->m.ts][(int)tmp[0] / g->m.ts] == '1' ||
 		g->m.a[(int)g->pl.p[1] / g->m.ts][((int)tmp[0] + i) / g->m.ts] == '1' ||
-		g->m.a[((int)g->pl.p[1] + i) / g->m.ts][((int)tmp[0] + g->pl.s - 1) / g->m.ts] == '1' ||
-		g->m.a[((int)g->pl.p[1] + g->pl.s - 1) / g->m.ts][((int)tmp[0] + i) / g->m.ts] == '1')
+		g->m.a[((int)g->pl.p[1] + i) / g->m.ts][((int)tmp[0] + g->pl.s / 2 - 1) / g->m.ts] == '1' ||
+		g->m.a[((int)g->pl.p[1] + g->pl.s / 2 - 1) / g->m.ts][((int)tmp[0] + i) / g->m.ts] == '1')
 			g->pl.coll[0] = 1;
 	}
 	if (!g->pl.coll[0])
@@ -601,6 +585,7 @@ int		main(int a, char **b)
 	g.dpp = (g.res[0] / 2) / tan((60 * M_PI / 180) / 2);
 	g.sfr = (M_PI / 3) / g.res[0];
 	g.pi_6 = M_PI / 6;
+	g.dtr = M_PI / 180;
 	g.tb.w = mlx_new_window(g.tb.p, g.res[0], g.res[1], "lul");
 	close(fd);
 	mlx_hook(g.tb.w, 2, 0L, kp, &g.pl);

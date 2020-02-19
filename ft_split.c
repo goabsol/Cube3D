@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 13:30:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/16 18:55:55 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/19 07:06:34 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ static	int		sc(char *s, char c)
 	a = 0;
 	while (1)
 	{
-		if ((++i != 0 && s[i] == c && s[i - 1] != '\\' && s[i - 1] != '\0')
-		|| (s[i] == '\0' && s[i - 1] != '\0'))
+		if ((++i != 0 && s[i] == c && s[i - 1] != '\0')
+		|| (i != 0 && s[i] == '\0' && s[i - 1] != '\0'))
 			a++;
 		if (!(s[i]))
 			break ;
-		if (s[i] == c && s[i - 1] != '\\')
+		if (s[i] == c)
 			s[i] = '\0';
 	}
 	return (a);
@@ -53,9 +53,9 @@ char			**ft_split(char const *s, char c)
 	char	**tab;
 	char	*nw;
 
-	if (!s || !(nw = (char *)malloc(sizeof(char) * (ft_strlen(s) + 1))))
+	if (!s)
 		return (NULL);
-	ft_strlcpy(nw, s, ft_strlen(s) + 1);
+	nw = ft_strdup(s);
 	a = sc(nw, c);
 	b = 0;
 	i = -1;
