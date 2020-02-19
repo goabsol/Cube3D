@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 11:41:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/17 23:17:13 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/19 06:57:06 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ typedef struct	s_game
 	t_s			*sd;
 	int			a;
 	double 		dpp;
+	double		dtr;
 	double		sfr;
 	double		sct[3];
 	double		pi_6;
