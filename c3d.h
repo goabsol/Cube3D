@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 11:41:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/19 06:57:06 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/20 05:52:47 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,16 @@ typedef struct	s_sprite
 	double		cte;
 	double		dst;
 	double		dfc;
-	int			hvi;
 	int			sh;
+	int 		stop;
+	int			sbot;
+	int			c1;
+	double		c2;
+	int			x1;
+	int			x2;
+	int			co1;
+	int			co2;
+	int			co3;
 }				t_s;
 
 typedef struct	s_game
@@ -105,6 +113,7 @@ typedef struct	s_game
 	double		tmp[4];
 	t_s			*sd;
 	int			a;
+	double		step[2];
 	double 		dpp;
 	double		dtr;
 	double		sfr;
