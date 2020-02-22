@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 07:13:31 by arhallab          #+#    #+#             */
-/*   Updated: 2020/01/03 18:15:30 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/22 17:30:17 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int		ft_atoi(const char *s)
 {
-	int					i;
+	int			i;
 	long long	val;
-	int					sign;
+	int			sign;
 
 	sign = 1;
 	i = -1;

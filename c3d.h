@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 11:41:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/20 05:52:47 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/22 17:00:50 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,6 @@
 # define EM "Error\nInvalid Map\n"
 # define MIN(a,b) (((a)<(b))?(a):(b))
 # define MAX(a,b) (((a)>(b))?(a):(b))
-
-char			**ft_split(char const *s, char c);
-int				ft_strcmp(const char *s1, const char *s2);
-size_t			ft_strlcpy(char *dst, const char *src, size_t s);
-int				ft_atoi(const char *s);
-char			*ft_substr(char const *s, unsigned int start, size_t len);
-char			*ft_strtrim(char const *s1, char const *set);
-int 			ps(char *str);
 
 typedef struct	s_toolbox
 {
@@ -67,7 +59,7 @@ typedef struct	s_player
 	double		p[2];
 	int			s;
 	int			ms;
-	int 		rs;
+	int			rs;
 	double		o;
 	int			coll[2];
 	double		t[4];
@@ -77,19 +69,12 @@ typedef struct	s_player
 	int			ld;
 	int			lr;
 	int			ll;
+	int			escape;
 }				t_pl;
 
 typedef struct	s_sprite
 {
-	double		p[2];
-	double		c[2];
-	double		s[2];
-	double		pcls;
-	double		cte;
-	double		dst;
-	double		dfc;
-	int			sh;
-	int 		stop;
+	int			stop;
 	int			sbot;
 	int			c1;
 	double		c2;
@@ -98,27 +83,56 @@ typedef struct	s_sprite
 	int			co1;
 	int			co2;
 	int			co3;
+	double		p[2];
+	double		c[2];
+	double		s[2];
+	double		pcls;
+	double		cte;
+	double		dst;
+	double		dfc;
+	int			sh;
 }				t_s;
 
 typedef struct	s_game
 {
+	t_s			*sd;
+	double		pi_6;
+	double		dtr;
 	int			checklist[8];
 	int			res[2];
 	t_tb		tb;
-	t_pl		pl;
+	t_pl		p;
 	int			pe;
 	int			n_sp;
 	t_m			m;
 	int			yuzless;
 	double		tmp[4];
-	t_s			*sd;
 	int			a;
 	double		step[2];
-	double 		dpp;
-	double		dtr;
+	double		dpp;
 	double		sfr;
 	double		sct[3];
-	double		pi_6;
 }				t_g;
+
+char			**ft_split(char const *s, char c);
+int				ft_strcmp(const char *s1, const char *s2);
+size_t			ft_strlcpy(char *dst, const char *src, size_t s);
+int				ft_atoi(const char *s);
+char			*ft_substr(char const *s, unsigned int start, size_t len);
+char			*ft_strtrim(char const *s1, char const *set);
+int				ps(char *str);
+t_g				new_game(void);
+t_pl			new_plr(size_t x, t_m m, int a);
+int				count(char *s, char c);
+int				stlen(char **t);
+int				ocins(char *c, const char *s);
+int				ft_array_realloc(char ***p, size_t size);
+int				t_s_array_realloc(t_s **p, size_t size);
+void			sprite_rsort(t_s **a, int s);
+int				kp(int k, t_pl *p);
+int				kr(int k, t_pl *p);
+int				hi(t_g *g);
+void			drawplayer(t_pl p, t_g g);
+char			*strdup_spe(char *s, char c);
 
 #endif
