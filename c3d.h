@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 11:41:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/22 17:00:50 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/23 00:55:25 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct	s_map
 	int			*sa;
 	ssize_t		fc;
 	ssize_t		cc;
+	int			mend;
 }				t_m;
 
 typedef struct	s_player
@@ -134,5 +135,6 @@ int				kr(int k, t_pl *p);
 int				hi(t_g *g);
 void			drawplayer(t_pl p, t_g g);
 char			*strdup_spe(char *s, char c);
+void			readdotcub(t_g *g, int fd);
 
 #endif

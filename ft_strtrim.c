@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 13:24:27 by arhallab          #+#    #+#             */
-/*   Updated: 2020/01/04 18:02:47 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/23 01:33:16 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static	unsigned int	*ni(char const *s1, char const *set)
 	while (i1 < ft_strlen(set) || i2 < ft_strlen(set))
 	{
 		if (i >= j)
-			return (list2int(1, 0));
+			return (list2int(i, j));
 		if (i1 < ft_strlen(set) && set[i1++] == s1[i])
 		{
 			i++;
@@ -59,7 +59,7 @@ char					*ft_strtrim(char const *s1, char const *set)
 
 	if (!s1)
 		return (NULL);
-	if (!(set && *s1))
+	if (!(set && *set && *s1))
 		return (ft_strdup(s1));
 	l = ni(s1, set);
 	if (!l)
