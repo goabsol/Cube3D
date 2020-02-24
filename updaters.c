@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 16:37:09 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/22 17:23:52 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/24 08:31:29 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int			hi(t_g *g)
 	collditions(g, tmp);
 	g->p.p[0] = !g->p.coll[0] ? tmp[0] : g->p.p[0];
 	g->p.p[1] = !g->p.coll[1] ? tmp[1] : g->p.p[1];
-	drawplayer(g->p, *g);
+	dothestuff(g->p, *g);
 	mlx_put_image_to_window(g->tb.p, g->tb.w, g->tb.bi, 0, 0);
 	return (0);
 }

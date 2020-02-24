@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 23:39:51 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/23 19:50:49 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/24 08:56:04 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ static void	distributitwo(t_g *g, char **t)
 
 	if (!ft_strcmp(t[0], "F"))
 	{
-		stlen(t) != 2 || ocins("0123456789,", t[1]) || count(t[1], ',') != 2
-		|| stlen(tt = ft_split(t[1], ',')) != 3 || ft_atoi(tt[0]) < 0 ||
-		ft_atoi(tt[1]) < 0 || ft_atoi(tt[2]) < 0 || (g->checklist[6])++
+		stlen(t) != 2 || ocins("0123456789, ", t[1]) || count(t[1], ',') != 2
+		|| stlen(tt = ft_split(t[1], ',')) != 3 || !isnum(tt[0])
+		|| B(ft_atoi(tt[0])) || !isnum(tt[1]) || B(ft_atoi(tt[1])) ||
+		!isnum(tt[2]) || B(ft_atoi(tt[2])) || (g->checklist[6])++
 		? exit(ps(ECF)) : 0;
 		(*g).m.fc = ft_atoi(tt[0]) * (size_t)pow(16, 4)
 		+ ft_atoi(tt[1]) * (size_t)pow(16, 2) + ft_atoi(tt[2]);
@@ -35,7 +36,7 @@ static void	distributitwo(t_g *g, char **t)
 		+ ft_atoi(tt[1]) * (size_t)pow(16, 2) + ft_atoi(tt[2]);
 	}
 	else
-		exit(printf(EC));
+		exit(printf("EC"));
 }
 
 static void	distributione(t_g *g, char **t)
@@ -105,7 +106,7 @@ void		readdotcub(t_g *g, int fd)
 		l = ft_strtrim(l, " ");
 		g->m.mend && l[0] ? exit(ps(EC)) : 0;
 		if (chrinstr("RNESWFC", l[0]) && c++ < 8)
-			distributione(g, ft_split(l, ' '));
+			distributione(g, split_1space(l));
 		else if (c == 8)
 		{
 			if ((i = mapcheck(g, i, l, f)) == 2)

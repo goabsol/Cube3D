@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 11:41:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/23 00:55:25 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/24 08:47:08 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # define EM "Error\nInvalid Map\n"
 # define MIN(a,b) (((a)<(b))?(a):(b))
 # define MAX(a,b) (((a)>(b))?(a):(b))
+# define B(a) ((a) < 256 || (a) >= 0 ? 0 : 1)
 
 typedef struct	s_toolbox
 {
@@ -32,6 +33,20 @@ typedef struct	s_toolbox
 	char		*bi;
 	int			*bi_a;
 }				t_tb;
+
+typedef struct	s_render_ctes
+{
+	int			wallh;
+	int 		wtop;
+	int			wbot;
+	int			x1;
+	int			x2;
+	int			x3;
+	int			x4;
+	int			c1;
+	double		c2;
+	int			c;
+}				t_rc;
 
 typedef struct	s_map
 {
@@ -106,7 +121,7 @@ typedef struct	s_game
 	int			pe;
 	int			n_sp;
 	t_m			m;
-	int			yuzless;
+	int			yzle;
 	double		tmp[4];
 	int			a;
 	double		step[2];
@@ -116,6 +131,7 @@ typedef struct	s_game
 }				t_g;
 
 char			**ft_split(char const *s, char c);
+char			**split_1space(char const *s);
 int				ft_strcmp(const char *s1, const char *s2);
 size_t			ft_strlcpy(char *dst, const char *src, size_t s);
 int				ft_atoi(const char *s);
@@ -133,8 +149,11 @@ void			sprite_rsort(t_s **a, int s);
 int				kp(int k, t_pl *p);
 int				kr(int k, t_pl *p);
 int				hi(t_g *g);
-void			drawplayer(t_pl p, t_g g);
+void			dothestuff(t_pl p, t_g g);
 char			*strdup_spe(char *s, char c);
 void			readdotcub(t_g *g, int fd);
+int				isnum(char *s);
+void			raycast(t_g *g, int h, int w, t_pl p);
+void			startingpoint(t_g *g, t_pl *p, double ray);
 
 #endif

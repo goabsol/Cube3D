@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 15:51:54 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/22 16:19:34 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/24 08:39:24 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ t_g				new_game(void)
 		g.checklist[i] = 0;
 	g.m = new_m();
 	g.tb.p = mlx_init();
+	g.m.mend = 0;
 	g.res[0] = 0;
 	g.res[1] = 0;
 	g.m.fc = 0;
@@ -68,6 +69,8 @@ t_g				new_game(void)
 	g.pe = 0;
 	g.a = 32;
 	g.n_sp = 0;
+	g.pi_6 = M_PI / 6;
+	g.dtr = M_PI / 180;
 	return (g);
 }
 
