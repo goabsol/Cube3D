@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/24 08:43:27 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/24 08:55:37 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/27 17:10:57 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@ static void	spritedetect(t_g *g, int v, t_pl p)
 {
 	t_s *t;
 
-	t_s_array_realloc(&(g->sd), g->n_sp + 1);
+	t_s_array_realloc(&(g->sd), g->n_sp + 1) ? 0 : exit(ps(MF, g));
 	t = &(g->sd[g->n_sp]);
 	t->c[0] = (int)g->tmp[0 + 2 * v] / g->m.ts * g->m.ts + g->m.ts / 2;
 	t->c[1] = (int)g->tmp[1 + 2 * v] / g->m.ts * g->m.ts + g->m.ts / 2;
-	t->dst = sqrt(pow(t->c[0] - p.p[0], 2) + pow(t->c[1] - p.p[1], 2));
+	t->dst = dst(t->c[0], p.p[0], t->c[1], p.p[1]);
 	t->p[0] = p.p[0] - g->sct[0] * t->dst;
 	t->p[1] = p.p[1] - g->sct[1] * t->dst;
 	t->sh = g->dpp * g->m.ts / t->dst;
-	t->dfc = sqrt(pow(t->c[0] - t->p[0], 2) + pow(t->c[1] - t->p[1], 2));
+	t->dfc = dst(t->c[0], t->p[0], t->c[1], t->p[1]);
 	t->stop = g->res[1] / 2;
 	t->sbot = (g->res[1] / 2) + (t->sh / 2);
 	t->co1 = (t->p[0] > t->c[0] && p.lu) || (t->p[0] < t->c[0] && p.ld);
@@ -42,24 +42,21 @@ static void	spritedetect(t_g *g, int v, t_pl p)
 
 void		raycast(t_g *g, int h, int w, t_pl p)
 {
-	while (g->tmp[0] < w && g->tmp[1] < h
-	&& g->tmp[0] > -1 && g->tmp[1] > -1
-	&& !(g->m.a[(int)g->tmp[1] / g->m.ts][(int)g->tmp[0] / g->m.ts] == '1'))
+	while (g->tmp[0] < w && g->tmp[1] < h && g->tmp[0] > -1 && g->tmp[1] > -1
+	&& g->m.a[(int)g->tmp[1] / g->m.ts][(int)g->tmp[0] / g->m.ts] != '1')
 	{
 		if (g->m.a[(int)g->tmp[1] / g->m.ts][(int)g->tmp[0] / g->m.ts] == '2')
 			spritedetect(g, 0, p);
 		g->tmp[0] += g->step[0];
 		g->tmp[1] += g->step[1];
 	}
-	g->step[0] = (g->m.ts / g->sct[2]) * (g->sct[0] < 0 ? 1 : -1);
-	g->step[1] = g->m.ts * (g->sct[0] < 0 ? 1 : -1);
 	while (g->tmp[2] < w && g->tmp[3] < h && g->tmp[2] >= 0 && g->tmp[3] >= 0
-	&& !(g->m.a[(int)g->tmp[3] / g->m.ts][(int)g->tmp[2] / g->m.ts] == '1'))
+	&& g->m.a[(int)g->tmp[3] / g->m.ts][(int)g->tmp[2] / g->m.ts] != '1')
 	{
 		if (g->m.a[(int)g->tmp[3] / g->m.ts][(int)g->tmp[2] / g->m.ts] == '2')
 			spritedetect(g, 1, p);
-		g->tmp[3] += g->step[0];
-		g->tmp[2] += g->step[1];
+		g->tmp[3] += g->step[2];
+		g->tmp[2] += g->step[3];
 	}
 	g->tmp[1] += p.lu;
 	g->tmp[2] += p.ll;
@@ -81,4 +78,6 @@ void		startingpoint(t_g *g, t_pl *p, double ray)
 	g->tmp[3] = p->p[1] + (g->tmp[2] + p->ll - p->p[0]) / g->sct[2];
 	g->step[0] = g->m.ts * g->sct[2] * (g->sct[1] < 0 ? 1 : -1);
 	g->step[1] = g->m.ts * (g->sct[1] < 0 ? 1 : -1);
+	g->step[2] = (g->m.ts / g->sct[2]) * (g->sct[0] < 0 ? 1 : -1);
+	g->step[3] = g->m.ts * (g->sct[0] < 0 ? 1 : -1);
 }

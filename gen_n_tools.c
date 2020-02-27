@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 15:51:54 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/24 08:39:24 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/27 23:52:44 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ static t_m		new_m(void)
 {
 	t_m		m;
 
-	m.a = malloc(sizeof(char *));
-	*m.a = 0;
+	m.a = NULL;
 	m.offset[0] = 0;
 	m.offset[1] = 0;
 	m.ts = 64;
@@ -61,9 +60,13 @@ t_g				new_game(void)
 		g.checklist[i] = 0;
 	g.m = new_m();
 	g.tb.p = mlx_init();
+	g.sd = NULL;
 	g.m.mend = 0;
 	g.res[0] = 0;
 	g.res[1] = 0;
+	g.whotofree[0] = 0;
+	g.whotofree[1] = 0;
+	g.whotofree[2] = 0;
 	g.m.fc = 0;
 	g.m.cc = 0;
 	g.pe = 0;
@@ -71,6 +74,8 @@ t_g				new_game(void)
 	g.n_sp = 0;
 	g.pi_6 = M_PI / 6;
 	g.dtr = M_PI / 180;
+	g.save = 0;
+	g.tb.animg = 0;
 	return (g);
 }
 

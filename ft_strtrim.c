@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 13:24:27 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/23 01:33:16 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/26 22:03:18 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,28 @@ static	unsigned int	*ni(char const *s1, char const *set)
 	return (list2int(i, j));
 }
 
-char					*ft_strtrim(char const *s1, char const *set)
+int						ft_strtrim(char **s1, char const *set)
 {
 	unsigned int	*l;
 	char			*ns;
 
-	if (!s1)
-		return (NULL);
-	if (!(set && *set && *s1))
-		return (ft_strdup(s1));
-	l = ni(s1, set);
+	if (!*s1)
+	{
+		return (1);
+	}
+	if (!(set && *set && **s1))
+		return (1);
+	l = ni(*s1, set);
 	if (!l)
-		return (NULL);
-	ns = ft_substr(s1, l[0], l[1] - l[0] + 1);
-	return (ns);
+	{
+		free(*s1);
+		*s1 = NULL;
+		return (0);
+	}
+	if (!(ns = ft_substr(*s1, l[0], l[1] - l[0] + 1)))
+		return (0);
+	free(*s1);
+	*s1 = ns;
+	free(l);
+	return (1);
 }

@@ -6,45 +6,45 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 16:37:09 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/24 08:31:29 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/26 07:50:11 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "c3d.h"
 
-int			kp(int k, t_pl *p)
+int			kp(int k, t_g *g)
 {
 	if (k == 13)
-		p->w[0] = 1;
+		g->p.w[0] = 1;
 	else if (k == 1)
-		p->w[1] = 1;
+		g->p.w[1] = 1;
 	else if (k == 2)
-		p->w[2] = 1;
+		g->p.w[2] = 1;
 	else if (!k)
-		p->w[3] = 1;
+		g->p.w[3] = 1;
 	else if (k == 124)
-		p->t[0] = 1;
+		g->p.t[0] = 1;
 	else if (k == 123)
-		p->t[1] = 1;
+		g->p.t[1] = 1;
 	else if (k == 53)
-		exit(1);
+		exit(ps("", g));
 	return (1);
 }
 
-int			kr(int k, t_pl *p)
+int			kr(int k, t_g *g)
 {
 	if (k == 13)
-		p->w[0] = 0;
+		g->p.w[0] = 0;
 	if (k == 1)
-		p->w[1] = 0;
+		g->p.w[1] = 0;
 	if (k == 2)
-		p->w[2] = 0;
+		g->p.w[2] = 0;
 	if (!k)
-		p->w[3] = 0;
+		g->p.w[3] = 0;
 	if (k == 124)
-		p->t[0] = 0;
+		g->p.t[0] = 0;
 	if (k == 123)
-		p->t[1] = 0;
+		g->p.t[1] = 0;
 	return (1);
 }
 
@@ -90,7 +90,7 @@ int			hi(t_g *g)
 	collditions(g, tmp);
 	g->p.p[0] = !g->p.coll[0] ? tmp[0] : g->p.p[0];
 	g->p.p[1] = !g->p.coll[1] ? tmp[1] : g->p.p[1];
-	dothestuff(g->p, *g);
+	dothestuff(g->p, g);
 	mlx_put_image_to_window(g->tb.p, g->tb.w, g->tb.bi, 0, 0);
 	return (0);
 }

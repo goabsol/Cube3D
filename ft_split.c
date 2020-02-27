@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 13:30:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/24 07:00:17 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/26 21:51:09 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,9 @@ char			**split_1space(char const *s)
 
 	if (!s)
 		return (NULL);
-	nw = ft_strdup(s);
-	if (nw[0] == 'R')
+	if (s[0] == 'R')
 		return (ft_split(s, ' '));
+	nw = ft_strdup(s);
 	a = ss1(nw);
 	b = 0;
 	i = -1;
