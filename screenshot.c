@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 15:02:40 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/27 18:45:19 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/28 14:30:34 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_rgb			colorconverter(int hexvalue)
 	return (rgbcolor);
 }
 
-void			*ft_memcpy(void *dest, const void *src, size_t n)
+static void		*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	char			*ndest;
 	const char		*nsrc;
@@ -41,7 +41,7 @@ void			*ft_memcpy(void *dest, const void *src, size_t n)
 	return ((char*)dest);
 }
 
-void			screen_init(t_g *g, unsigned char *header)
+static void		screen_init(t_g *g, unsigned char *header)
 {
 	g->scr.r[0] = g->res[0];
 	g->scr.r[1] = g->res[1];
@@ -64,7 +64,7 @@ void			screen_init(t_g *g, unsigned char *header)
 	ft_memcpy(header + 34, &(g->scr.imagesize), 4);
 }
 
-void			scr_g(t_g *g, int x)
+static void		scr_g(t_g *g, int x)
 {
 	t_rgb	color;
 

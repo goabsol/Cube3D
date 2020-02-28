@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 20:50:34 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/28 00:23:34 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/28 15:10:47 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,13 @@ static void	renderingwall(t_g *g, int j, double raydistance, t_pl p)
 		else if (i > c.wbot)
 			g->tb.bi_a[c.c] = g->m.fc;
 		else if (!g->yzle && p.lu)
-			g->tb.bi_a[c.c] = g->m.na[c.x1 + (int)((i - c.c1) * c.c2) * 64];
+			g->tb.bi_a[c.c] = g->m.soa[c.x1 + (int)((i - c.c1) * c.c2) * 64];
 		else if (!g->yzle && p.ld)
 			g->tb.bi_a[c.c] = g->m.na[c.x2 + (int)((i - c.c1) * c.c2) * 64];
 		else if (g->yzle && p.lr)
-			g->tb.bi_a[c.c] = g->m.na[c.x3 + (int)((i - c.c1) * c.c2) * 64];
+			g->tb.bi_a[c.c] = g->m.wea[c.x3 + (int)((i - c.c1) * c.c2) * 64];
 		else if (g->yzle && p.ll)
-			g->tb.bi_a[c.c] = g->m.na[c.x4 + (int)((i - c.c1) * c.c2) * 64];
+			g->tb.bi_a[c.c] = g->m.eaa[c.x4 + (int)((i - c.c1) * c.c2) * 64];
 		renderingsprite(g, raydistance, &c, i);
 	}
 	free(g->sd);
@@ -127,7 +127,7 @@ int			main(int a, char **b)
 	g.m.sa = (int *)mlx_get_data_addr(g.m.st, &g.yzle, &g.yzle, &g.yzle);
 	g.dpp = (g.res[0] / 2) / tan((60 * M_PI / 180) / 2);
 	g.sfr = (M_PI / 3) / g.res[0];
-	g.tb.w = mlx_new_window(g.tb.p, g.res[0], g.res[1], "Cub3D");
+	(g.tb.w = mlx_new_window(g.tb.p, g.res[0], g.res[1], C)) && (g.tb.aw++);
 	(g.tb.bi = mlx_new_image(g.tb.p, g.res[0], g.res[1])) && (g.tb.animg++);
 	g.tb.bi_a = (int *)mlx_get_data_addr(g.tb.bi, &g.yzle, &g.yzle, &g.yzle);
 	close(fd);

@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:43:07 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/28 00:21:49 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/28 14:40:56 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,11 @@ int		ps(char *str, t_g *g)
 		write(2, (void *)str++, 1);
 	freetab(g->m.a);
 	free(g->sd);
-	if (g->whotofree[0])
-		free(g->l);
-	if (g->whotofree[1])
-		freetab(g->t);
-	if (g->whotofree[2])
-		freetab(g->tt);
-	if (g->tb.animg)
-		mlx_destroy_image(g->tb.p, g->tb.bi);
+	g->whotofree[0] ? free(g->l) : 0;
+	g->whotofree[1] ? freetab(g->t) : 0;
+	g->whotofree[2] ? freetab(g->tt) : 0;
+	g->tb.animg ? mlx_destroy_image(g->tb.p, g->tb.bi) : 0;
+	g->tb.aw ? mlx_destroy_window(g->tb.p, g->tb.w) : 0;
 	return (1);
 }
 

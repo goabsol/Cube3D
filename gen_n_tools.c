@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 15:51:54 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/27 23:52:44 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/28 14:40:51 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ t_g				new_game(void)
 	g.dtr = M_PI / 180;
 	g.save = 0;
 	g.tb.animg = 0;
+	g.tb.aw = 0;
 	return (g);
 }
 

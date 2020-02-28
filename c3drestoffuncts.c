@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/24 08:43:27 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/27 17:10:57 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/28 15:11:02 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	spritedetect(t_g *g, int v, t_pl p)
 	t->p[1] = p.p[1] - g->sct[1] * t->dst;
 	t->sh = g->dpp * g->m.ts / t->dst;
 	t->dfc = dst(t->c[0], t->p[0], t->c[1], t->p[1]);
-	t->stop = g->res[1] / 2;
+	t->stop = (g->res[1] / 2);
 	t->sbot = (g->res[1] / 2) + (t->sh / 2);
 	t->co1 = (t->p[0] > t->c[0] && p.lu) || (t->p[0] < t->c[0] && p.ld);
 	t->co2 = (t->p[1] < p.p[1] && p.p[1] < t->c[1] && p.lr) ||

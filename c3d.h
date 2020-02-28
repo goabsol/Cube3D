@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 11:41:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/27 23:52:23 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/28 14:40:27 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # define MF "Error\nMalloc Has Failed\n"
 # define WA "Error\nWrong Argument Given\n"
 # define ARG "Error\nno || too many/few arguments given\n"
+# define C "Cub3D"
 
 typedef struct	s_toolbox
 {
@@ -33,6 +34,7 @@ typedef struct	s_toolbox
 	char		*bi;
 	int			*bi_a;
 	int			animg;
+	int			aw;
 }				t_tb;
 
 typedef struct	s_screen
@@ -193,5 +195,6 @@ int				max(int a, int b);
 int				b(int a);
 double			dst(double x1, double x2, double y1, double y2);
 int				screen(t_g *g);
+t_rgb			colorconverter(int hexvalue);
 
 #endif
