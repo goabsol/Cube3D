@@ -6,13 +6,13 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/27 15:02:40 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/28 14:30:34 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/29 00:26:54 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "c3d.h"
 
-t_rgb			colorconverter(int hexvalue)
+static t_rgb	colorconverter(int hexvalue)
 {
 	t_rgb		rgbcolor;
 

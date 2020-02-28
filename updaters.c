@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 16:37:09 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/26 07:50:11 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/28 22:56:32 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,22 +56,22 @@ static void	collditions(t_g *g, double *tmp)
 	while (++i < g->p.s / 2)
 	{
 		if (g->m.a[((int)tmp[1] - g->p.s / 2 + 1 + i) / g->m.ts]
-		[((int)g->p.p[0] - g->p.s / 2 + 1) / g->m.ts] == '1' ||
+		[((int)g->p.p[0] - g->p.s / 2 + 1) / g->m.ts] != '0' ||
 		g->m.a[((int)tmp[1] - g->p.s / 2 + 1) / g->m.ts]
-		[((int)g->p.p[0] + i - g->p.s / 2 + 1) / g->m.ts] == '1' ||
+		[((int)g->p.p[0] + i - g->p.s / 2 + 1) / g->m.ts] != '0' ||
 		g->m.a[((int)tmp[1] - g->p.s / 2 + 1 + i) / g->m.ts]
-		[((int)g->p.p[0] + g->p.s / 2 - 1) / g->m.ts] == '1' ||
+		[((int)g->p.p[0] + g->p.s / 2 - 1) / g->m.ts] != '0' ||
 		g->m.a[((int)tmp[1] + g->p.s / 2 - 1) / g->m.ts]
-		[((int)g->p.p[0] + i - g->p.s / 2 + 1) / g->m.ts] == '1')
+		[((int)g->p.p[0] + i - g->p.s / 2 + 1) / g->m.ts] != '0')
 			g->p.coll[1] = 1;
 		if (g->m.a[((int)g->p.p[1] - g->p.s / 2 + 1 + i) / g->m.ts]
-		[((int)tmp[0] - g->p.s / 2 + 1) / g->m.ts] == '1' ||
+		[((int)tmp[0] - g->p.s / 2 + 1) / g->m.ts] != '0' ||
 		g->m.a[((int)g->p.p[1] - g->p.s / 2 + 1) / g->m.ts]
-		[((int)tmp[0] - g->p.s / 2 + 1 + i) / g->m.ts] == '1' ||
+		[((int)tmp[0] - g->p.s / 2 + 1 + i) / g->m.ts] != '0' ||
 		g->m.a[((int)g->p.p[1] - g->p.s / 2 + 1 + i) / g->m.ts]
-		[((int)tmp[0] + g->p.s / 2 - 1) / g->m.ts] == '1' ||
+		[((int)tmp[0] + g->p.s / 2 - 1) / g->m.ts] != '0' ||
 		g->m.a[((int)g->p.p[1] + g->p.s / 2 - 1) / g->m.ts]
-		[((int)tmp[0] - g->p.s / 2 + 1 + i) / g->m.ts] == '1')
+		[((int)tmp[0] - g->p.s / 2 + 1 + i) / g->m.ts] != '0')
 			g->p.coll[0] = 1;
 	}
 }

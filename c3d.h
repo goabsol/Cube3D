@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 11:41:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/28 14:40:27 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/28 23:59:14 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 # define EM "Error\nInvalid Map\n"
 # define MF "Error\nMalloc Has Failed\n"
 # define WA "Error\nWrong Argument Given\n"
-# define ARG "Error\nno || too many/few arguments given\n"
+# define NF "Error\nFile Not Found Or Name Is Wrong\n"
+# define ARG "Error\nNo || Too Many/Few Arguments Given\n"
 # define C "Cub3D"
 
 typedef struct	s_toolbox
@@ -188,13 +189,13 @@ void			readdotcub(t_g *g, int fd);
 int				isnum(char *s);
 void			raycast(t_g *g, int h, int w, t_pl p);
 void			startingpoint(t_g *g, t_pl *p, double ray);
-int				freetab(char **t);
+int				freetab(char ***t);
 int				fnfree(char **l);
 int				min(int a, int b);
 int				max(int a, int b);
 int				b(int a);
 double			dst(double x1, double x2, double y1, double y2);
 int				screen(t_g *g);
-t_rgb			colorconverter(int hexvalue);
+void			check_args(int a, char **b, t_g *g);
 
 #endif

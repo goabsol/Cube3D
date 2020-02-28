@@ -6,11 +6,13 @@
 #    By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/27 01:29:34 by arhallab          #+#    #+#              #
-#    Updated: 2020/02/28 03:56:07 by arhallab         ###   ########.fr        #
+#    Updated: 2020/02/28 23:14:45 by arhallab         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	Cub3D
+
+SCREEN	=	screenshot.bmp
 
 SRC		=	c3drestoffuncts.c even_mo_tools.c file_reader.c\
 			ft_atoi.c ft_c3d.c ft_split.c ft_strlcpy.c\
@@ -20,9 +22,10 @@ SRC		=	c3drestoffuncts.c even_mo_tools.c file_reader.c\
 all:$(NAME)
 
 $(NAME) :
-	gcc -g -Wall -Werror -Wextra -I /usr/local/include -L /usr/local/lib/ -lmlx -framework OpenGL -framework appkit $(SRC) -o $(NAME)
+	gcc -Wall -Werror -Wextra -I /usr/local/include -L /usr/local/lib/ -lmlx -framework OpenGL -framework appkit $(SRC) -o $(NAME)
 
 clean :
+	rm -f $(SCREEN)
 
 fclean : clean
 	rm -f $(NAME)

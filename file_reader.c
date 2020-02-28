@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 23:39:51 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/27 15:10:07 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/28 17:59:02 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	distributitwo(t_g *g, char **t)
 	}
 	else
 		exit(ps(EC, g));
-	freetab(g->tt) && g->whotofree[2]--;
+	freetab(&(g->tt)) && g->whotofree[2]--;
 }
 
 static int	distributione(t_g *g, char **t)
@@ -87,9 +87,10 @@ static int	mapcheck(t_g *g, size_t i, char *l, int f)
 	!= '1' || nl[0] != '1' || ocins("120NEWS", nl) || (g->m.col &&
 	g->m.col != ft_strlen(nl)) ? exit(ps(EM, g)) : 0);
 	while (++i < ft_strlen(nl))
-		if (chrinstr("NESW", nl[i]) && (nl[i] = '0'))
+		if (chrinstr("NESW", nl[i]))
 			(*g).pe++ ? exit(ps(EM, g)) : ((*g).p = new_plr(i, (*g).m,
-			!(nl[i] - 69) + !(nl[i] - 83) * 2 + !(nl[i] - 87) * 3));
+			!(nl[i] - 'W') + !(nl[i] - 'S') * 2 + !(nl[i] - 'E') * 3
+			+ (nl[i] = '0')));
 	(*g).m.a[(*g).m.row++] = nl;
 	(*g).m.a[(*g).m.row] = 0;
 	return (0);
@@ -108,7 +109,7 @@ void		readdotcub(t_g *g, int fd)
 		g->whotofree[0] = 1;
 		g->m.mend && g->l[0] ? exit(ps(EC, g)) : 0;
 		if (chrinstr("RNESWFC", g->l[0]) && c++ < 8)
-			distributione(g, g->t = split_1space(g->l)) && freetab(g->t)
+			distributione(g, g->t = split_1space(g->l)) && freetab(&(g->t))
 			&& (g->whotofree[1] = 0);
 		else if (c == 8)
 		{

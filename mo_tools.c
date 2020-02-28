@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 16:26:42 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/26 02:54:27 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/02/28 18:18:08 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int		ft_array_realloc(char ***p, size_t size)
 	if (!(*p))
 	{
 		*p = ptr;
+		while (i < size)
+			ptr[i++] = NULL;
 		return (1);
 	}
 	while ((*p)[i])
@@ -44,6 +46,8 @@ int		ft_array_realloc(char ***p, size_t size)
 		ptr[i] = (*p)[i];
 		i++;
 	}
+	while (i < size)
+		ptr[i++] = NULL;
 	free(*p);
 	*p = ptr;
 	return (1);
