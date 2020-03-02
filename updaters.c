@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 16:37:09 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/28 22:56:32 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/03/02 15:15:56 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,9 @@ int			hi(t_g *g)
 	dothestuff(g->p, g);
 	mlx_put_image_to_window(g->tb.p, g->tb.w, g->tb.bi, 0, 0);
 	return (0);
+}
+
+int			closewindow(t_g *g)
+{
+	exit(ps(NULL, g));
 }

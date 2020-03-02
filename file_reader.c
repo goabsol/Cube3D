@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 23:39:51 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/28 17:59:02 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/03/02 15:08:08 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,20 @@ static int	distributione(t_g *g, char **t)
 		|| (g->res[0] = min(ft_atoi(t[1]), 2560)) <= 0 || (g->res[1] += min(
 		ft_atoi(t[2]), 1440)) <= 0 || (g->checklist[0])++ ? exit(ps(ER, g)) : 0;
 	else if (!ft_strcmp(t[0], "NO"))
-		stlen(t) != 2 || !(g->m.nt = mlx_xpm_file_to_image(g->tb.p, t[1],
-		&((*g).a), &((*g).a))) || (g->checklist[1])++ ? exit(ps(ET, g)) : 0;
+		stlen(t) != 2 || (g->checklist[1])++ || !(g->m.nt = XFTI(g->tb.p, t[1],
+		&(g->a), &(g->a))) ? exit(ps(ET, g)) : 0;
 	else if (!ft_strcmp(t[0], "EA"))
-		stlen(t) != 2 || !((*g).m.eat = mlx_xpm_file_to_image((*g).tb.p, t[1],
-		&((*g).a), &((*g).a))) || (g->checklist[2])++ ? exit(ps(ET, g)) : 0;
+		stlen(t) != 2 || (g->checklist[2])++ || !(g->m.eat = XFTI(g->tb.p, t[1],
+		&(g->a), &(g->a))) ? exit(ps(ET, g)) : 0;
 	else if (!ft_strcmp(t[0], "SO"))
-		stlen(t) != 2 || !((*g).m.sot = mlx_xpm_file_to_image((*g).tb.p, t[1],
-		&((*g).a), &((*g).a))) || (g->checklist[3])++ ? exit(ps(ET, g)) : 0;
+		stlen(t) != 2 || (g->checklist[3])++ || !(g->m.sot = XFTI(g->tb.p, t[1],
+		&(g->a), &(g->a))) ? exit(ps(ET, g)) : 0;
 	else if (!ft_strcmp(t[0], "WE"))
-		stlen(t) != 2 || !((*g).m.wet = mlx_xpm_file_to_image((*g).tb.p, t[1],
-		&((*g).a), &((*g).a))) || (g->checklist[4])++ ? exit(ps(ET, g)) : 0;
+		stlen(t) != 2 || (g->checklist[4])++ || !(g->m.wet = XFTI(g->tb.p, t[1],
+		&(g->a), &(g->a))) ? exit(ps(ET, g)) : 0;
 	else if (!ft_strcmp(t[0], "S"))
-		stlen(t) != 2 || !((*g).m.st = mlx_xpm_file_to_image((*g).tb.p, t[1],
-		&((*g).a), &((*g).a))) || (g->checklist[5])++ ? exit(ps(ET, g)) : 0;
+		stlen(t) != 2 || (g->checklist[5])++ || !(g->m.st = XFTI(g->tb.p, t[1],
+		&(g->a), &(g->a))) ? exit(ps(ET, g)) : 0;
 	else
 		distributitwo(g, t);
 	return (1);

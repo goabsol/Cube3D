@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 20:50:34 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/28 23:32:07 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/03/02 15:53:27 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ static void	renderingsprite(t_g *g, double raydistance, t_rc *c, int i)
 		t.dfc <= 32 && t.dst <= raydistance)
 		{
 			if (!t.co1 && g->m.sa[t.x1 +
-			(int)((i - t.c1) * t.c2) * 64] != 0X5)
+			(int)((i - t.c1) * t.c2) * 64] != 0XFF33FF)
 				g->tb.bi_a[c->c] = g->m.sa[t.x1
 				+ (int)((i - t.c1) * t.c2) * 64];
 			else if (t.co1 && g->m.sa[t.x2 +
-			(int)((i - t.c1) * t.c2) * 64] != 0X5)
+			(int)((i - t.c1) * t.c2) * 64] != 0XFF33FF)
 				g->tb.bi_a[c->c] = g->m.sa[t.x2
 				+ (int)((i - t.c1) * t.c2) * 64];
 		}
@@ -67,13 +67,13 @@ static void	renderingwall(t_g *g, int j, double raydistance, t_pl p)
 		else if (i > c.wbot)
 			g->tb.bi_a[c.c] = g->m.fc;
 		else if (!g->yzle && p.lu)
-			g->tb.bi_a[c.c] = g->m.na[c.x1 + (int)((i - c.c1) * c.c2) * 64];
+			g->tb.bi_a[c.c] = g->m.soa[c.x1 + (int)((i - c.c1) * c.c2) * 64];
 		else if (!g->yzle && p.ld)
-			g->tb.bi_a[c.c] = g->m.soa[c.x2 + (int)((i - c.c1) * c.c2) * 64];
+			g->tb.bi_a[c.c] = g->m.na[c.x2 + (int)((i - c.c1) * c.c2) * 64];
 		else if (g->yzle && p.lr)
-			g->tb.bi_a[c.c] = g->m.eaa[c.x3 + (int)((i - c.c1) * c.c2) * 64];
+			g->tb.bi_a[c.c] = g->m.wea[c.x3 + (int)((i - c.c1) * c.c2) * 64];
 		else if (g->yzle && p.ll)
-			g->tb.bi_a[c.c] = g->m.wea[c.x4 + (int)((i - c.c1) * c.c2) * 64];
+			g->tb.bi_a[c.c] = g->m.eaa[c.x4 + (int)((i - c.c1) * c.c2) * 64];
 		renderingsprite(g, raydistance, &c, i);
 	}
 	free(g->sd);
@@ -132,6 +132,7 @@ int			main(int a, char **b)
 	close(fd);
 	!g.save && mlx_hook(g.tb.w, 2, 0L, kp, &g);
 	!g.save && mlx_hook(g.tb.w, 3, 0L, kr, &g);
+	!g.save && mlx_hook(g.tb.w, 17, 0L, closewindow, &g);
 	mlx_loop_hook(g.tb.p, hi, &g);
 	mlx_loop(g.tb.p);
 	return (0);

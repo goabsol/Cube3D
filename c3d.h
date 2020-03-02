@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 11:41:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/28 23:59:14 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/03/02 14:54:24 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define NF "Error\nFile Not Found Or Name Is Wrong\n"
 # define ARG "Error\nNo || Too Many/Few Arguments Given\n"
 # define C "Cub3D"
+# define XFTI mlx_xpm_file_to_image
 
 typedef struct	s_toolbox
 {
@@ -197,5 +198,6 @@ int				b(int a);
 double			dst(double x1, double x2, double y1, double y2);
 int				screen(t_g *g);
 void			check_args(int a, char **b, t_g *g);
+int				closewindow(t_g *g);
 
 #endif
