@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:43:07 by arhallab          #+#    #+#             */
-/*   Updated: 2020/03/02 15:10:14 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/03/03 00:38:36 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,5 @@ void	check_args(int a, char **b, t_g *g)
 	a != 2 && a != 3 ? exit(ps(ARG, g)) : 0;
 	if (a == 3)
 		!ft_strcmp(b[2], "--save") ? g->save = 1 : exit(ps(WA, g));
-	if (a == 2)
-		!ft_strcmp(b[1] + ft_strlen(b[1]) - 4, ".cub") ? 0 : exit(ps(WA, g));
+	!ft_strcmp(b[1] + ft_strlen(b[1]) - 4, ".cub") ? 0 : exit(ps(WA, g));
 }

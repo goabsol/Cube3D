@@ -6,11 +6,11 @@
 #    By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/27 01:29:34 by arhallab          #+#    #+#              #
-#    Updated: 2020/02/28 23:14:45 by arhallab         ###   ########.fr        #
+#    Updated: 2020/03/03 01:02:19 by arhallab         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	=	Cub3D
+NAME	=	cub3D
 
 SCREEN	=	screenshot.bmp
 
