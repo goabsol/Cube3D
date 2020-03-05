@@ -6,11 +6,18 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 23:39:51 by arhallab          #+#    #+#             */
-/*   Updated: 2020/03/02 15:08:08 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/03/05 01:37:50 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "c3d.h"
+
+static char	gfnsc(char *l)
+{
+	while (*l == ' ')
+		l++;
+	return (*l);
+}
 
 static void	distributitwo(t_g *g, char **t)
 {
@@ -67,32 +74,39 @@ static int	distributione(t_g *g, char **t)
 	return (1);
 }
 
-static int	mapcheck(t_g *g, size_t i, char *l, int f)
+static int	mapcheck(t_g *g, size_t i, int f)
 {
-	char	*nl;
+	char		*nl;
+	int			j;
 
-	if (l[0] != '1')
-	{
-		l[0] ? exit(ps(EC, g)) : 0;
-		g->m.row && ocins("1 ", g->m.a[g->m.row - 1]) ? exit(ps(EM, g)) : 0;
-		g->m.row ? (g->m.mend = 1) : 0;
-		if (!f)
-			return (1);
-		return (2);
-	}
-	(nl = strdup_spe(l, ' ')) ? 0 : exit(ps(MF, g));
-	ft_array_realloc(&(*g).m.a, (*g).m.row + 2) ? 0 : exit(ps(MF, g));
-	g->m.col ? 0 : (g->m.col = ft_strlen(nl));
-	(((!f || !(*g).m.row) && ocins("1", nl)) || nl[ft_strlen(nl) - 1]
-	!= '1' || nl[0] != '1' || ocins("120NEWS", nl) || (g->m.col &&
-	g->m.col != ft_strlen(nl)) ? exit(ps(EM, g)) : 0);
+	(void)f;
+	// if (g->l[0] != '1')
+	// {
+	// 	g->l[0] ? exit(ps(EC, g)) : 0;
+	// 	g->m.row && ocins("1 ", g->m.a[g->m.row - 1]) ? exit(ps(EM, g)) : 0;
+	// 	g->m.row ? (g->m.mend = 1) : 0;
+	// 	if (!f)
+	// 		return (1);
+	// 	return (2);
+	// }
+	(nl = ft_strdup(g->l)) ? 0 : exit(ps(MF, g));
+	ft_realloc((void *)&(g->m.a), (g->m.row + 2), sizeof(char *))
+	? 0 : exit(ps(MF, g));
+	g->m.col >= ft_strlen(nl) ? 0 : (g->m.col = ft_strlen(nl));
+	(((!f || !g->m.row) && ocins("1", nl)) ||
+	ocins("120NEWS ", nl) ? exit(ps(EM, g)) : 0);
 	while (++i < ft_strlen(nl))
 		if (chrinstr("NESW", nl[i]))
-			(*g).pe++ ? exit(ps(EM, g)) : ((*g).p = new_plr(i, (*g).m,
+			g->pe++ ? exit(ps(EM, g)) : (g->p = new_plr(i, g->m,
 			!(nl[i] - 'W') + !(nl[i] - 'S') * 2 + !(nl[i] - 'E') * 3
 			+ (nl[i] = '0')));
-	(*g).m.a[(*g).m.row++] = nl;
-	(*g).m.a[(*g).m.row] = 0;
+	i -= i + 1;
+	g->m.a[g->m.row++] = nl;
+	g->m.a[g->m.row] = 0;
+	while (++i < g->m.row && (j = -1))
+	{
+		
+	}
 	return (0);
 }
 
@@ -104,20 +118,18 @@ void		readdotcub(t_g *g, int fd)
 
 	while (((i = -1) || 1))
 	{
-		((f *= get_next_line(fd, &g->l)) || 1) && ft_strtrim(&g->l, " ") ? 0 :
-		exit(ps(MF, g));
+		(f *= get_next_line(fd, &g->l)) == -1 ? exit(ps(MF, g)) : 0;
 		g->whotofree[0] = 1;
 		g->m.mend && g->l[0] ? exit(ps(EC, g)) : 0;
-		if (chrinstr("RNESWFC", g->l[0]) && c++ < 8)
+		if (chrinstr("RNESWFC", gfnsc(&(g->l[0]))) && c++ < 8)
 			distributione(g, g->t = split_1space(g->l)) && freetab(&(g->t))
 			&& (g->whotofree[1] = 0);
 		else if (c == 8)
 		{
-			if ((i = mapcheck(g, i, g->l, f)) == 2 && fnfree(&g->l))
-				continue ;
+			mapcheck(g, i, f);
 		}
-		else if (g->l[0])
-			exit(ps(EC, g));
+		else if (gfnsc(&(g->l[0])))
+			exit(ps("EC", g));
 		free(g->l);
 		if (!(g->whotofree[0] = 0) && (!f || i == 1))
 			break ;

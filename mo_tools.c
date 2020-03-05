@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 16:26:42 by arhallab          #+#    #+#             */
-/*   Updated: 2020/02/28 18:18:08 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/03/04 22:56:08 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ int		ocins(char *c, const char *s)
 	return (0);
 }
 
-int		ft_array_realloc(char ***p, size_t size)
+int		ft_realloc(void ***p, size_t size, size_t so)
 {
-	char				**ptr;
+	void				**ptr;
 	unsigned long long	i;
 
 	i = 0;
-	if (!(ptr = malloc(sizeof(char *) * size)))
+	if (!(ptr = malloc(size * so)))
 		return (0);
 	if (!(*p))
 	{

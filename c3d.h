@@ -6,7 +6,7 @@
 /*   By: arhallab <arhallab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/04 11:41:38 by arhallab          #+#    #+#             */
-/*   Updated: 2020/03/02 14:54:24 by arhallab         ###   ########.fr       */
+/*   Updated: 2020/03/04 23:03:07 by arhallab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ t_pl			new_plr(size_t x, t_m m, int a);
 int				count(char *s, char c);
 int				stlen(char **t);
 int				ocins(char *c, const char *s);
-int				ft_array_realloc(char ***p, size_t size);
+int				ft_realloc(void ***p, size_t size, size_t so);
 int				t_s_array_realloc(t_s **p, size_t size);
 void			sprite_rsort(t_s **a, int s);
 int				kp(int k, t_g *g);
@@ -199,5 +199,6 @@ double			dst(double x1, double x2, double y1, double y2);
 int				screen(t_g *g);
 void			check_args(int a, char **b, t_g *g);
 int				closewindow(t_g *g);
+void			mapfill(t_g *g, char *l);
 
 #endif
